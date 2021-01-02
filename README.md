@@ -13,7 +13,9 @@ Home Assistant is a free and open-source home automation software designed to be
 Off, On (Heating) and Pause (temperature OK) state:
 
 ![](https://user-images.githubusercontent.com/5886900/103456043-b35dd600-4cf2-11eb-814c-949253dd4bb3.png)
+
 ![](https://user-images.githubusercontent.com/5886900/103456050-c53f7900-4cf2-11eb-90a5-3d287ee338e4.png)
+
 ![](https://user-images.githubusercontent.com/5886900/103456056-d8524900-4cf2-11eb-9df0-8a4c9cbb8485.png)
 
 At the bottom left you see the history of the last 3 hours.
@@ -28,11 +30,19 @@ I have a smart power plug connected to Home Assistant which has a electric heate
 
 You need Administrator rights!
 
-1. Download the latest release
-2. Place it on a fixed place, like C:\Program Files\HAClimateDeskBand\
-3. Right click DeskBand_Install.bat and choose "Run as Administrator"
-4. Right click the taskbar, go to Toolbars, check "HA Climate DeskBand". You might have to click twice to make it appear.
-5. Click on the label appearing to open the Settings
+You need a Long Lived Access Token for the [Home Assistant REST API](https://developers.home-assistant.io/docs/api/rest/).
+
+1.  Download the latest release
+2.  Place it on a fixed place, like C:\\Program Files\\HAClimateDeskBand\\
+3.  Right click DeskBand\_Install.bat and choose "Run as Administrator"
+4.  Right click the taskbar, go to Toolbars, check "HA Climate DeskBand". You might have to click twice to make it appear.
+5.  Click on the label appearing to open the Settings
+
+# Manual
+
+To open Settings click on the first label on the control.
+
+![](https://user-images.githubusercontent.com/5886900/103456844-4e0de300-4cfa-11eb-85a8-b78b0b07ee31.png)
 
 # Support
 
@@ -42,21 +52,25 @@ If you have any other issue, see the appropriate reference below.
 
 # Ideas
 
-* Add context menu
-* Hover over it to see a 'popup' with a bigger graph.
-* Replace Newtonsoft.Json with System.Text.Json (upgrade to .NET 5)
-* Installer
+*   Add context menu
+*   Hover over it to see a 'popup' with a bigger graph.
+*   Replace Newtonsoft.Json with System.Text.Json (upgrade to .NET 5)
+*   Installer
 
 # References
 
 [Home Assistant](https://www.home-assistant.io/)
 
-[CSDeskBand](https://github.com/dsafa/CSDeskBand)
+[HA Generic Thermostat](https://www.home-assistant.io/integrations/generic_thermostat/)
+
+[Home Assistant REST API](https://developers.home-assistant.io/docs/api/rest/)
 
 [Xiaomi LYWSD03MMC](https://a.aliexpress.com/_BSEyaG)
 
 [ATC1441 firmware](https://github.com/atc1441/ATC_MiThermometer)
 
 [ESP32](https://a.aliexpress.com/_B1IE4Y)
+
+[CSDeskBand](https://github.com/dsafa/CSDeskBand)
 
 [HA Community Xiaomi LYWSD03MMC](https://community.home-assistant.io/search?q=Xiaomi%20LYWSD03MMC)
