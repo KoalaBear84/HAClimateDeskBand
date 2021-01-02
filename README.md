@@ -58,3 +58,5 @@ If you have any other issue, see the appropriate reference below.
 [ATC1441 firmware](https://github.com/atc1441/ATC_MiThermometer)
 
 [ESP32](https://a.aliexpress.com/_B1IE4Y)
+
+[HA Community Xiaomi LYWSD03MMC](https://community.home-assistant.io/search?q=Xiaomi%20LYWSD03MMC)
