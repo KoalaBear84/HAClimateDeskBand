@@ -89,7 +89,7 @@ namespace HAClimateDeskband
             }
             catch (Exception ex)
             {
-                SetErrorState(ex.Message);
+                SetErrorState($"Error loading control: {ex.Message}");
             }
         }
 
@@ -128,7 +128,7 @@ namespace HAClimateDeskband
             }
             catch (Exception ex)
             {
-                SetErrorState(ex.Message);
+                SetErrorState($"Error loading settings: {ex.Message}");
             }
         }
 
@@ -144,13 +144,13 @@ namespace HAClimateDeskband
         {
             if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
             {
-                SetErrorState("Error, API Base Url is NOT OK.");
+                SetErrorState("Error settings: API Base Url is NOT OK.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ApiKey))
             {
-                SetErrorState("Error, API Key is NOT OK.");
+                SetErrorState("Error settings: API Key is NOT OK.");
                 return false;
             }
 
@@ -313,7 +313,7 @@ namespace HAClimateDeskband
             }
             catch (Exception ex)
             {
-                SetErrorState(ex.Message);
+                SetErrorState($"Error retrieving/updating values: {ex.Message}");
             }
         }
 
