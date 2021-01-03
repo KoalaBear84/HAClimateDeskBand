@@ -1,5 +1,5 @@
 @echo OFF
-title Uninstall DeskBand
+title Install DeskBand
 @echo ON
 @setlocal enableextensions
 @cd /d "%~dp0"
@@ -14,9 +14,13 @@ if %errorLevel% == 0 (
     goto EXIT
 )
 
-if defined %PROGRAMFILES(x86)% (
-   %SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe /nologo /codebase /u "HAClimateDeskband.dll"
+if defined ProgramFiles(x86) (
+	set command=%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe
 ) else (
-   %SystemRoot%\Microsoft.NET\Framework\v4.0.30319\regasm.exe /nologo /codebase /u "HAClimateDeskband.dll"
+	set command=%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\regasm.exe
 )
+
+%command% /nologo /codebase /u "HAClimateDeskband.dll"
+
+:EXIT
 pause
