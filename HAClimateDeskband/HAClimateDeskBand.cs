@@ -6,7 +6,7 @@ namespace HAClimateDeskband
 {
     [ComVisible(true)]
     [Guid("CE5E3E5C-C896-4963-99C9-0DF948BA092B")]
-    [CSDeskBand.CSDeskBandRegistration(Name = "HA Climate DeskBand")]
+    [CSDeskBand.CSDeskBandRegistration(Name = "HA Climate DeskBand", ShowDeskBand = true)]
     public class HAClimateDeskBand : CSDeskBand.CSDeskBandWin
     {
         HAClimateUserControl HomeAssistantUserControl { get; set; } = new HAClimateUserControl();
