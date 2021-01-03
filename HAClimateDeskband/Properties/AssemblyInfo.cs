@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HomeAssistantDeskband")]
+[assembly: AssemblyTitle("HAClimateDeskBand")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HomeAssistantDeskband")]
-[assembly: AssemblyCopyright("Copyright © KoalaBear 2020")]
+[assembly: AssemblyProduct("HAClimateDeskBand")]
+[assembly: AssemblyCopyright("Copyright © KoalaBear 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
