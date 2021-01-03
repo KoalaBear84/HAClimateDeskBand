@@ -108,6 +108,7 @@ namespace HAClimateDeskband
                 bool settingsOK = SettingsOK();
 
                 PictureHA.Visible = !settingsOK;
+                ResizeControls();
 
                 if (settingsOK)
                 {
@@ -118,7 +119,6 @@ namespace HAClimateDeskband
 
                     HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HAClimateDeskBandSettings.ApiKey);
 
-                    ResizeControls();
                     UpdateValues();
                 }
                 else
