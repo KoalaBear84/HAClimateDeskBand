@@ -138,14 +138,21 @@ namespace HAClimateDeskband
 
         private void SetTemperature(double temperatureDelta)
         {
-            string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
-            JObject climateGarageState = JObject.Parse(json);
+            try
+            {
+                string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
+                JObject climateGarageState = JObject.Parse(json);
 
-            double currentSetTemperature = climateGarageState.SelectToken(".attributes.temperature").Value<double>();
-            double newSetTemperature = currentSetTemperature += temperatureDelta;
+                double currentSetTemperature = climateGarageState.SelectToken(".attributes.temperature").Value<double>();
+                double newSetTemperature = currentSetTemperature += temperatureDelta;
 
-            HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/set_temperature", new StringContent($"{{ \"entity_id\": \"{HAClimateDeskBandSettings.ClimateEntityId}\", \"temperature\": {newSetTemperature} }}")).GetAwaiter().GetResult();
-            httpResponseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/set_temperature", new StringContent($"{{ \"entity_id\": \"{HAClimateDeskBandSettings.ClimateEntityId}\", \"temperature\": {newSetTemperature} }}")).GetAwaiter().GetResult();
+                httpResponseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                SetErrorState($"Error setting temperature to {temperatureDelta}: {ex.Message}");
+            }
         }
 
         private void UpdateValues()
@@ -354,12 +361,19 @@ namespace HAClimateDeskband
             UpdateValues();
         }
 
-        private string SetClimate(bool on)
+        private void SetClimate(bool on)
         {
-            string command = on ? "turn_on" : "turn_off";
+            try
+            {
+                string command = on ? "turn_on" : "turn_off";
 
-            HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/{command}", new StringContent($"{{ \"entity_id\": \"{HAClimateDeskBandSettings.ClimateEntityId}\" }}")).GetAwaiter().GetResult();
-            return httpResponseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/{command}", new StringContent($"{{ \"entity_id\": \"{HAClimateDeskBandSettings.ClimateEntityId}\" }}")).GetAwaiter().GetResult();
+                httpResponseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                SetErrorState($"Error setting climate state to {(on ? "On" : "Off")}: {ex.Message}");
+            }
         }
 
         private void HomeAssistantUserControl_Load(object sender, EventArgs e)
