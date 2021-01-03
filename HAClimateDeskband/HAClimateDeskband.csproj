@@ -119,7 +119,14 @@
   </ItemGroup>
   <Target Name="ILMerge">
     <!-- the ILMergePath property points to the location of ILMerge.exe console application -->
-    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)\HAClimateDeskband.dll $(OutDir)\Newtonsoft.Json.dll $(OutDir)\OxyPlot.dll $(OutDir)\OxyPlot.WindowsForms.dll" />
+    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)HAClimateDeskband-merged.dll $(OutDir)HAClimateDeskband.dll $(OutDir)Newtonsoft.Json.dll $(OutDir)OxyPlot.dll $(OutDir)OxyPlot.WindowsForms.dll" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskband.dll&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskband.pdb&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)Newtonsoft.Json.dll&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)OxyPlot.dll&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)OxyPlot.WindowsForms.dll&quot;" />
+    <Exec Command="ren &quot;$(OutDir)HAClimateDeskband-merged.dll&quot; &quot;$(OutDir)HAClimateDeskband.dll&quot;" />
+    <Exec Command="ren &quot;$(OutDir)HAClimateDeskband-merged.pdb&quot; &quot;$(OutDir)HAClimateDeskband.pdb&quot;" />
   </Target>
   <ItemGroup>
     <None Include="Resources\Flame.png" />
