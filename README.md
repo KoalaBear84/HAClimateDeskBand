@@ -12,7 +12,9 @@ Home Assistant is a free and open-source home automation software designed to be
 
 Off, On (Heating) and Pause (temperature OK) state:
 
-![](https://user-images.githubusercontent.com/5886900/103456043-b35dd600-4cf2-11eb-814c-949253dd4bb3.png) ![](https://user-images.githubusercontent.com/5886900/103456050-c53f7900-4cf2-11eb-90a5-3d287ee338e4.png) ![](https://user-images.githubusercontent.com/5886900/103456056-d8524900-4cf2-11eb-9df0-8a4c9cbb8485.png)
+![](https://user-images.githubusercontent.com/5886900/103456043-b35dd600-4cf2-11eb-814c-949253dd4bb3.png)
+![](https://user-images.githubusercontent.com/5886900/103456050-c53f7900-4cf2-11eb-90a5-3d287ee338e4.png)
+![](https://user-images.githubusercontent.com/5886900/103456056-d8524900-4cf2-11eb-9df0-8a4c9cbb8485.png)
 
 At the bottom left you see the history of the last 3 hours.
 
@@ -46,12 +48,22 @@ I do NOT provide support for setting up Home Assistant, ESP32, Xiaomi. If you ha
 
 If you have any other issue, see the appropriate reference below.
 
+# Build it
+
+You can use a free [Visual Studio 2019+ Community](https://visualstudio.microsoft.com/vs/community/) to build it. Be sure to include the ".NET desktop development" workload.
+
+![](https://user-images.githubusercontent.com/5886900/103488252-4ee26a00-4e0b-11eb-88ca-10d720578148.png)
+
+### System.Reflection.ReflectionTypeLoadException: 'Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.'
+
+When you start it for the first time, it will throw this error.. I don't know why, but I do know how to 'fix' it. Copy Newtonsoft.Json.dll, OxyPlot.dll and OxyPlot.WindowsForms.dll, which are in the bin\\Debug folder, and copy them to the obj\\Debug folder. If anybody knows why this is and has a better fix, please report! :)
+
 # Ideas
 
 *   Add context menu
 *   Hover over it to see a 'popup' with a bigger graph.
-*   Replace Newtonsoft.Json with System.Text.Json (upgrade to .NET 5)
-*   Installer
+*   Replace Newtonsoft.Json?
+*   Installer?
 
 # References
 
