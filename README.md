@@ -10,7 +10,7 @@ Home Assistant is a free and open-source home automation software designed to be
 
 ## Screenshots
 
-![](https://user-images.githubusercontent.com/5886900/103490238-beac2100-4e1a-11eb-8e70-4fa4021974b4.png) Default view, no "Small icons", single row, 40px, heating (3.71 kWh used today)
+![](https://user-images.githubusercontent.com/5886900/103490238-beac2100-4e1a-11eb-8e70-4fa4021974b4.png) Default view, "Small icons" disabled, single row, 40px, heating (3.71 kWh used today)
 
 ![](https://user-images.githubusercontent.com/5886900/103490258-e56a5780-4e1a-11eb-92ba-4f69433d66c1.png) "Small icons" enabled, single row, 30px, heating
 
