@@ -34,9 +34,12 @@ namespace HAClimateDeskband
             this.Timer = new System.Windows.Forms.Timer(this.components);
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.LblTemperature = new System.Windows.Forms.Label();
+            this.PictureHA = new System.Windows.Forms.PictureBox();
             this.PictureOff = new System.Windows.Forms.PictureBox();
             this.PicturePause = new System.Windows.Forms.PictureBox();
             this.PictureFire = new System.Windows.Forms.PictureBox();
+            this.ToolTipSettings = new System.Windows.Forms.ToolTip(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.PictureHA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureOff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicturePause)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureFire)).BeginInit();
@@ -81,6 +84,19 @@ namespace HAClimateDeskband
             this.LblTemperature.Text = "12.5°C";
             this.LblTemperature.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LblTemperature_MouseDown);
             // 
+            // PictureHA
+            // 
+            this.PictureHA.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.PictureHA.Image = global::HAClimateDeskband.Properties.Resources.HomeAssistant;
+            this.PictureHA.Location = new System.Drawing.Point(8, 15);
+            this.PictureHA.Name = "PictureHA";
+            this.PictureHA.Size = new System.Drawing.Size(28, 28);
+            this.PictureHA.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PictureHA.TabIndex = 10;
+            this.PictureHA.TabStop = false;
+            this.ToolTipSettings.SetToolTip(this.PictureHA, "Click here for Settings");
+            this.PictureHA.Click += new System.EventHandler(this.PictureHA_Click);
+            // 
             // PictureOff
             // 
             this.PictureOff.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -123,6 +139,12 @@ namespace HAClimateDeskband
             this.PictureFire.TabStop = false;
             this.PictureFire.Click += new System.EventHandler(this.Picture_Click);
             // 
+            // ToolTipSettings
+            // 
+            this.ToolTipSettings.IsBalloon = true;
+            this.ToolTipSettings.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.ToolTipSettings.ToolTipTitle = "HA Climate DeskBand";
+            // 
             // HAClimateUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,11 +155,13 @@ namespace HAClimateDeskband
             this.Controls.Add(this.PicturePause);
             this.Controls.Add(this.PictureFire);
             this.Controls.Add(this.LblInfo);
+            this.Controls.Add(this.PictureHA);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "HAClimateUserControl";
             this.Size = new System.Drawing.Size(43, 60);
             this.Load += new System.EventHandler(this.HomeAssistantUserControl_Load);
             this.Resize += new System.EventHandler(this.HomeAssistantUserControl_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.PictureHA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureOff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PicturePause)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureFire)).EndInit();
@@ -155,5 +179,7 @@ namespace HAClimateDeskband
         private System.Windows.Forms.PictureBox PicturePause;
         private System.Windows.Forms.PictureBox PictureOff;
         private System.Windows.Forms.Label LblTemperature;
+        private System.Windows.Forms.PictureBox PictureHA;
+        private System.Windows.Forms.ToolTip ToolTipSettings;
     }
 }

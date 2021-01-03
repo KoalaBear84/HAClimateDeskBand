@@ -93,14 +93,6 @@ namespace HAClimateDeskband
             }
         }
 
-        private void PlotViewTemperature_MouseHover(object sender, EventArgs e)
-        {
-            // Show 'popup' screen with bigger graph, including axis
-            // Maybe more info, if possible
-            // Show info if some controls are not shown
-            MessageBox.Show("TEST");
-        }
-
         public void LoadSettings()
         {
             try
@@ -113,7 +105,11 @@ namespace HAClimateDeskband
                 PictureOff.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId);
                 PicturePause.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId);
 
-                if (SettingsOK())
+                bool settingsOK = SettingsOK();
+
+                PictureHA.Visible = !settingsOK;
+
+                if (settingsOK)
                 {
                     HttpClient = new HttpClient
                     {
@@ -127,13 +123,38 @@ namespace HAClimateDeskband
                 }
                 else
                 {
-                    LblInfo.Text = "Click here!";
+                    LblInfo.Text = string.Empty;
                 }
             }
             catch (Exception ex)
             {
                 SetErrorState(ex.Message);
             }
+        }
+
+        private void OpenSettings()
+        {
+            FormSettings formSettings = Application.OpenForms.OfType<FormSettings>().FirstOrDefault() ?? new FormSettings();
+            formSettings.HAClimateDeskband = this;
+            formSettings.Show();
+            formSettings.BringToFront();
+        }
+
+        private bool SettingsOK()
+        {
+            if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
+            {
+                SetErrorState("Error, API Base Url is NOT OK.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ApiKey))
+            {
+                SetErrorState("Error, API Key is NOT OK.");
+                return false;
+            }
+
+            return true;
         }
 
         private void SetTemperature(double temperatureDelta)
@@ -157,6 +178,18 @@ namespace HAClimateDeskband
             catch (Exception ex)
             {
                 SetErrorState($"Error setting temperature to {temperatureDelta}: {ex.Message}");
+            }
+        }
+
+        private void ChangeTemperature(bool increase)
+        {
+            if (increase)
+            {
+                SetTemperature(0.1);
+            }
+            else
+            {
+                SetTemperature(-0.1);
             }
         }
 
@@ -284,23 +317,6 @@ namespace HAClimateDeskband
             }
         }
 
-        private bool SettingsOK()
-        {
-            if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
-            {
-                SetErrorState("Error, API Base Url is NOT OK.");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ApiKey))
-            {
-                SetErrorState("Error, API Key is NOT OK.");
-                return false;
-            }
-
-            return true;
-        }
-
         private void SetErrorState(string message)
         {
             ControlsHelper.SyncBeginInvoke(this, () =>
@@ -311,13 +327,6 @@ namespace HAClimateDeskband
                 ToolTip.SetToolTip(LblInfo, message);
                 ToolTip.ToolTipTitle = "Error";
             });
-        }
-
-        private void HomeAssistantUserControl_Resize(object sender, EventArgs e)
-        {
-            ResizeControls();
-
-            UpdateValues();
         }
 
         public void ResizeControls()
@@ -353,17 +362,8 @@ namespace HAClimateDeskband
             }
 
             LblTemperature.Top = PlotViewTemperature.Bottom - 10;
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            UpdateValues();
-        }
-
-        private void Picture_Click(object sender, EventArgs e)
-        {
-            SetClimate(sender == PictureOff);
-            UpdateValues();
+            PictureHA.Left = (ClientSize.Width / 2) + PictureHA.Width / 2;
+            PictureHA.Top = (ClientSize.Height / 2) + PictureHA.Height / 2;
         }
 
         private void SetClimate(bool on)
@@ -384,6 +384,25 @@ namespace HAClimateDeskband
             {
                 SetErrorState($"Error setting climate state to {(on ? "On" : "Off")}: {ex.Message}");
             }
+        }
+
+        #region Form Event Handlers
+        private void HomeAssistantUserControl_Resize(object sender, EventArgs e)
+        {
+            ResizeControls();
+
+            UpdateValues();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            UpdateValues();
+        }
+
+        private void Picture_Click(object sender, EventArgs e)
+        {
+            SetClimate(sender == PictureOff);
+            UpdateValues();
         }
 
         private void HomeAssistantUserControl_Load(object sender, EventArgs e)
@@ -408,24 +427,23 @@ namespace HAClimateDeskband
             UpdateValues();
         }
 
-        private void ChangeTemperature(bool increase)
-        {
-            if (increase)
-            {
-                SetTemperature(0.1);
-            }
-            else
-            {
-                SetTemperature(-0.1);
-            }
-        }
-
         private void LblInfo_Click(object sender, EventArgs e)
         {
-            FormSettings formSettings = Application.OpenForms.OfType<FormSettings>().FirstOrDefault() ?? new FormSettings();
-            formSettings.HAClimateDeskband = this;
-            formSettings.Show();
-            formSettings.BringToFront();
+            OpenSettings();
         }
+
+        private void PictureHA_Click(object sender, EventArgs e)
+        {
+            OpenSettings();
+        }
+
+        private void PlotViewTemperature_MouseHover(object sender, EventArgs e)
+        {
+            // Show 'popup' screen with bigger graph, including axis
+            // Maybe more info, if possible
+            // Show info if some controls are not shown
+            MessageBox.Show("TEST");
+        }
+        #endregion
     }
 }
