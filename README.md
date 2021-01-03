@@ -1,4 +1,4 @@
-# HA Climate Deskband
+# Home Assistant Climate Deskband
 
 Control a thermostat from you taskbar!
 
@@ -9,6 +9,17 @@ I wanted to have a quicker way to control the thermostat than open the webpage o
 Home Assistant is a free and open-source home automation software designed to be the central home automation control system for controlling smart home technology.
 
 ## Screenshots
+
+![](https://user-images.githubusercontent.com/5886900/103490238-beac2100-4e1a-11eb-8e70-4fa4021974b4.png) Default view, "Small icons" disabled, single row, 40px, heating (3.71 kWh used today)
+
+![](https://user-images.githubusercontent.com/5886900/103490258-e56a5780-4e1a-11eb-92ba-4f69433d66c1.png) "Small icons" enabled, single row, 30px, heating
+
+![](https://user-images.githubusercontent.com/5886900/103490277-0f237e80-4e1b-11eb-9537-73338f10af36.png) "Small icons" enabled, double row, 60px, heating (temperature last changed at 23:21)
+
+![](https://user-images.githubusercontent.com/5886900/103490312-5578dd80-4e1b-11eb-857b-927bc6a12c3d.png) "Small icons" enabled, single row, 30px, "Prefer Last Change and Power Usage" on, heating
+
+![](https://user-images.githubusercontent.com/5886900/103490358-92dd6b00-4e1b-11eb-8d3a-87478a4613c6.png) "Small icons" disabled, single row, 40px, heating
+
 
 Off, On (Heating) and Pause (temperature OK) state:
 
@@ -33,12 +44,21 @@ You need a Long Lived Access Token for the [Home Assistant REST API](https://dev
 1.  Download the latest release
 2.  Place it on a fixed place, like C:\\Program Files\\HAClimateDeskBand\\
 3.  Right click DeskBand\_Install.bat and choose "Run as Administrator"
-4.  Right click the taskbar, go to Toolbars, check "HA Climate DeskBand". You might have to click twice to make it appear.
-5.  Click on the label appearing to open the Settings
+4.  You will get the following screen
+
+![](https://user-images.githubusercontent.com/5886900/103490074-9243d500-4e19-11eb-9523-7ae4cf649721.png)
+
+If not:
+
+1.  Right click the taskbar, go to Toolbars, check "HA Climate DeskBand". You might have to click twice to make it appear.
 
 # Manual
 
-To open Settings click on the first label on the control.
+To open Settings click on the Home Assistant logo in the middle the control.
+
+![](https://user-images.githubusercontent.com/5886900/103488786-ff526d00-4e0f-11eb-920c-fde3bbd99318.png)
+
+This will open the Settings window.
 
 ![](https://user-images.githubusercontent.com/5886900/103456844-4e0de300-4cfa-11eb-85a8-b78b0b07ee31.png)
 
