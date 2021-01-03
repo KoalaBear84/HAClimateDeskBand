@@ -107,13 +107,6 @@ namespace HAClimateDeskband
             {
                 HAClimateDeskBandSettings = Library.LoadSettings();
 
-                HttpClient = new HttpClient
-                {
-                    BaseAddress = new Uri(HAClimateDeskBandSettings.ApiBaseUrl)
-                };
-
-                HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HAClimateDeskBandSettings.ApiKey);
-
                 PlotViewTemperature.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId);
                 LblTemperature.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId);
                 PictureFire.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId);
@@ -122,6 +115,13 @@ namespace HAClimateDeskband
 
                 if (SettingsOK())
                 {
+                    HttpClient = new HttpClient
+                    {
+                        BaseAddress = new Uri(HAClimateDeskBandSettings.ApiBaseUrl)
+                    };
+
+                    HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HAClimateDeskBandSettings.ApiKey);
+
                     ResizeControls();
                     UpdateValues();
                 }
@@ -138,6 +138,11 @@ namespace HAClimateDeskband
 
         private void SetTemperature(double temperatureDelta)
         {
+            if (!SettingsOK())
+            {
+                return;
+            }
+
             try
             {
                 string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
@@ -157,13 +162,13 @@ namespace HAClimateDeskband
 
         private void UpdateValues()
         {
+            if (!SettingsOK())
+            {
+                return;
+            }
+
             try
             {
-                if (!SettingsOK())
-                {
-                    return;
-                }
-
                 decimal temperature = 0;
                 string temperatureUOM = string.Empty;
                 decimal setTemperature = 0;
@@ -283,13 +288,13 @@ namespace HAClimateDeskband
         {
             if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
             {
-                SetErrorState("Error, API Base Url is OK.");
+                SetErrorState("Error, API Base Url is NOT OK.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ApiKey))
             {
-                SetErrorState("Error, API Key is OK.");
+                SetErrorState("Error, API Key is NOT OK.");
                 return false;
             }
 
@@ -363,6 +368,11 @@ namespace HAClimateDeskband
 
         private void SetClimate(bool on)
         {
+            if (!SettingsOK())
+            {
+                return;
+            }
+
             try
             {
                 string command = on ? "turn_on" : "turn_off";
