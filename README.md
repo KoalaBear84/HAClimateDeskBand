@@ -64,16 +64,20 @@ This will open the Settings window.
 
 **Enable/disable thermostat**
 
-Clicking on the Power icon will turn it on. Clicking on the Fire or Pause icon will turn it off.
+Clicking on the Power icon will turn it on.
+
+Clicking on the Fire or Pause icon will turn it off.
 
 **Increase Temperature**
 
 Click on the temperature on the bottom right.
+
 Scroll up on temperature on the bottom right.
 
 **Decrease Temperature**
 
 Hold CTRL, click on the temperature on the bottom right.
+
 Scroll down on temperature on the bottom right.
 
 # Support
