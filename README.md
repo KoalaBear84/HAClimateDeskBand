@@ -103,6 +103,12 @@ When you start it for the first time, it will throw this error.. I don't know wh
 *   Replace Newtonsoft.Json?
 *   Installer?
 
+## Support
+
+If you like OpenDirectoryDownloader, please consider supporting me!
+
+[:heart: Sponsor](https://github.com/sponsors/KoalaBear84)
+
 # References
 
 [Home Assistant](https://www.home-assistant.io/)
