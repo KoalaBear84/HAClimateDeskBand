@@ -62,16 +62,16 @@ This will open the Settings window.
 
 ![](https://user-images.githubusercontent.com/5886900/103456844-4e0de300-4cfa-11eb-85a8-b78b0b07ee31.png)
 
-** Enable/disable thermostat **
+**Enable/disable thermostat**
 
 Clicking on the Power icon will turn it on. Clicking on the Fire or Pause icon will turn it off.
 
-** Increase Temperature **
+**Increase Temperature**
 
 Click on the temperature on the bottom right.
 Scroll up on temperature on the bottom right.
 
-** Decrease Temperature **
+**Decrease Temperature**
 
 Hold CTRL, click on the temperature on the bottom right.
 Scroll down on temperature on the bottom right.
