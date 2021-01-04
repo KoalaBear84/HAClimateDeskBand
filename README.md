@@ -105,7 +105,7 @@ When you start it for the first time, it will throw this error.. I don't know wh
 
 ## Support
 
-If you like OpenDirectoryDownloader, please consider supporting me!
+If you like HAClimateDeskBand, please consider supporting me!
 
 [:heart: Sponsor](https://github.com/sponsors/KoalaBear84)
 
