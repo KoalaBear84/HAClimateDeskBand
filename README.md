@@ -96,10 +96,12 @@ You can use a free [Visual Studio 2019+ Community](https://visualstudio.microsof
 
 When you start it for the first time, it will throw this error.. I don't know why, but I do know how to 'fix' it. Copy Newtonsoft.Json.dll, OxyPlot.dll and OxyPlot.WindowsForms.dll, which are in the bin\\Debug folder, and copy them to the obj\\Debug folder. If anybody knows why this is and has a better fix, please report! :)
 
-# Ideas
+# Ideas / Todos
 
 *   Add context menu
 *   Hover over it to see a 'popup' with a bigger graph.
+*   Restore color after error
+*   Improve efficiency, retrieve history graph since last datetime, and don't retrieve every run
 *   Replace Newtonsoft.Json?
 *   Installer?
 
