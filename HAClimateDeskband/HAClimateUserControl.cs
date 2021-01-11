@@ -208,7 +208,7 @@ namespace HAClimateDeskband
 
             try
             {
-                decimal temperature = 0;
+                decimal? temperature = null;
                 string temperatureUOM = string.Empty;
                 decimal setTemperature = 0;
                 DateTime lastChanged = DateTime.Now;
@@ -229,7 +229,7 @@ namespace HAClimateDeskband
 
                     foreach (JToken history in jArray)
                     {
-                        if (history.Value<string>("state") != "unavailable")
+                        if (history.Value<string>("state") != "unavailable" && history.Value<string>("state") != "unknown")
                         {
                             LineSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(history.Value<DateTime>("last_changed")), history.Value<double>("state")));
                         }
@@ -237,7 +237,11 @@ namespace HAClimateDeskband
 
                     PlotModelTemperature.InvalidatePlot(true);
 
-                    temperature = Math.Round(jObject.SelectToken(".state").Value<decimal>(), 1);
+                    if (jObject.SelectToken(".state").Value<string>() != "unavailable" && jObject.SelectToken(".state").Value<string>() != "unknown")
+                    {
+                        temperature = Math.Round(jObject.SelectToken(".state").Value<decimal>(), 1);
+                    }
+
                     lastChanged = jObject.SelectToken(".last_changed").Value<DateTime>();
                 }
 
@@ -283,7 +287,14 @@ namespace HAClimateDeskband
 
                     if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId))
                     {
-                        lines.Add($"{temperature:G29}{temperatureUOM}");
+                        if (temperature.HasValue)
+                        {
+                            lines.Add($"{temperature:G29}{temperatureUOM}");
+                        }
+                        else
+                        {
+                            lines.Add($"? {temperatureUOM}");
+                        }
 
                         if (ClientSize.Height > WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
                         {
