@@ -24,6 +24,7 @@ namespace HAClimateDeskband
         private HttpClient HttpClient { get; set; }
         private HAClimateDeskBandSettings HAClimateDeskBandSettings { get; set; }
         private Label LblMeasurePowerWidth;
+        private bool Initialized;
 
         const int WindowsTaskbarSmallIconsSingleRow = 30;
         const int WindowsTaskbarSmallIconsDoubleRow = WindowsTaskbarSmallIconsSingleRow * 2;
@@ -91,6 +92,8 @@ namespace HAClimateDeskband
             {
                 SetErrorState($"Error loading control: {ex.Message}");
             }
+
+            Initialized = true;
         }
 
         public void LoadSettings()
@@ -148,19 +151,32 @@ namespace HAClimateDeskband
 
         private bool SettingsOK()
         {
-            if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
+            if (!Initialized)
             {
-                SetErrorState("Error settings: API Base Url is NOT OK.");
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ApiKey))
+            try
             {
-                SetErrorState("Error settings: API Key is NOT OK.");
+                if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
+                {
+                    SetErrorState("Error settings: API Base Url is NOT OK.");
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ApiKey))
+                {
+                    SetErrorState("Error settings: API Key is NOT OK.");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in SettingsOK: {ex.Message}");
                 return false;
             }
-
-            return true;
         }
 
         private void SetTemperature(double temperatureDelta)
@@ -336,19 +352,33 @@ namespace HAClimateDeskband
 
         private void SetErrorState(string message)
         {
-            ControlsHelper.SyncBeginInvoke(this, () =>
+            try
             {
-                LblInfo.ForeColor = Color.Red;
+                ControlsHelper.SyncBeginInvoke(this, () =>
+                {
+                    LblInfo.ForeColor = Color.Red;
 
-                ToolTip.ToolTipIcon = ToolTipIcon.Error;
-                ToolTip.SetToolTip(LblInfo, message);
-                ToolTip.ToolTipTitle = "Error";
-            });
+                    ToolTip.ToolTipIcon = ToolTipIcon.Error;
+                    ToolTip.SetToolTip(LblInfo, message);
+                    ToolTip.ToolTipTitle = "Error";
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in SetErrorState: {ex.Message}");
+            }
         }
 
         public void ResizeControls()
         {
-            ControlsHelper.SyncBeginInvoke(this, () =>
+            if (!Initialized)
+            {
+                return;
+            }
+
+            try
+            {
+                ControlsHelper.SyncBeginInvoke(this, () =>
             {
                 // It's a mess, because of fonts and positions when the contents of the LblInfo changes..
                 if (ClientSize.Height <= WindowsTaskbarSmallIconsSingleRow)
@@ -384,6 +414,11 @@ namespace HAClimateDeskband
                 PictureHA.Left = (ClientSize.Width / 2) - PictureHA.Width / 2;
                 PictureHA.Top = (ClientSize.Height / 2) - PictureHA.Height / 2;
             });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in ResizeControls: {ex.Message}");
+            }
         }
 
         private void SetClimate(bool on)
