@@ -69,7 +69,9 @@
       <DependentUpon>HAClimateUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Library.cs" />
+    <Compile Include="Models\EntityModel.cs" />
     <Compile Include="Models\HAClimateDeskBandSettings.cs" />
+    <Compile Include="Models\SetTemperatureModel.cs" />
     <Compile Include="PlotViewTransparent.cs">
       <SubType>Component</SubType>
     </Compile>

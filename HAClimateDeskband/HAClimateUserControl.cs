@@ -1,4 +1,5 @@
 ﻿using HAClimateDeskband.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -6,6 +7,7 @@ using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -23,8 +25,9 @@ namespace HAClimateDeskband
         private PlotViewTransparent PlotViewTemperature { get; set; }
         private HttpClient HttpClient { get; set; }
         private HAClimateDeskBandSettings HAClimateDeskBandSettings { get; set; }
-        private Label LblMeasurePowerWidth;
-        private bool Initialized;
+        private readonly Label LblMeasurePowerWidth;
+        private readonly bool Initialized;
+        private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings { Culture = new CultureInfo("en-US") };
 
         const int WindowsTaskbarSmallIconsSingleRow = 30;
         const int WindowsTaskbarSmallIconsDoubleRow = WindowsTaskbarSmallIconsSingleRow * 2;
@@ -194,7 +197,13 @@ namespace HAClimateDeskband
                 double currentSetTemperature = climateGarageState.SelectToken(".attributes.temperature").Value<double>();
                 double newSetTemperature = currentSetTemperature += temperatureDelta;
 
-                HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/set_temperature", new StringContent($"{{ \"entity_id\": \"{HAClimateDeskBandSettings.ClimateEntityId}\", \"temperature\": {newSetTemperature} }}")).GetAwaiter().GetResult();
+
+                HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/set_temperature", new StringContent(JsonConvert.SerializeObject(new SetTemperatureModel
+                {
+                    ClimateEntityId = HAClimateDeskBandSettings.ClimateEntityId,
+                    Temperature = newSetTemperature
+                }, JsonSerializerSettings))).GetAwaiter().GetResult();
+
                 httpResponseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
             catch (Exception ex)
@@ -432,7 +441,10 @@ namespace HAClimateDeskband
             {
                 string command = on ? "turn_on" : "turn_off";
 
-                HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/{command}", new StringContent($"{{ \"entity_id\": \"{HAClimateDeskBandSettings.ClimateEntityId}\" }}")).GetAwaiter().GetResult();
+                HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/{command}", new StringContent(JsonConvert.SerializeObject(new EntityModel
+                {
+                    ClimateEntityId = HAClimateDeskBandSettings.ClimateEntityId
+                }, JsonSerializerSettings))).GetAwaiter().GetResult();
                 httpResponseMessage.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
             catch (Exception ex)
