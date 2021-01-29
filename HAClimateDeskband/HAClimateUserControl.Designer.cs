@@ -77,11 +77,11 @@ namespace HAClimateDeskband
             this.LblTemperature.BackColor = System.Drawing.Color.Transparent;
             this.LblTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LblTemperature.ForeColor = System.Drawing.Color.White;
-            this.LblTemperature.Location = new System.Drawing.Point(12, 47);
+            this.LblTemperature.Location = new System.Drawing.Point(30, 47);
             this.LblTemperature.Name = "LblTemperature";
-            this.LblTemperature.Size = new System.Drawing.Size(34, 12);
+            this.LblTemperature.Size = new System.Drawing.Size(15, 12);
             this.LblTemperature.TabIndex = 9;
-            this.LblTemperature.Text = "12.5°C";
+            this.LblTemperature.Text = "X°";
             this.LblTemperature.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LblTemperature_MouseDown);
             // 
             // PictureHA
@@ -150,12 +150,12 @@ namespace HAClimateDeskband
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.Controls.Add(this.PictureHA);
             this.Controls.Add(this.LblTemperature);
             this.Controls.Add(this.PictureOff);
             this.Controls.Add(this.PicturePause);
             this.Controls.Add(this.PictureFire);
             this.Controls.Add(this.LblInfo);
-            this.Controls.Add(this.PictureHA);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Name = "HAClimateUserControl";
             this.Size = new System.Drawing.Size(43, 60);

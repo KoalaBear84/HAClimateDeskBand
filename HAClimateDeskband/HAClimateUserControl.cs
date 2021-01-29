@@ -78,7 +78,6 @@ namespace HAClimateDeskband
                 //PlotViewTemperature.MouseHover += PlotViewTemperature_MouseHover;
 
                 Controls.Add(PlotViewTemperature);
-                PlotViewTemperature.BringToFront();
 
                 LblMeasurePowerWidth = new Label
                 {
@@ -86,8 +85,6 @@ namespace HAClimateDeskband
                     Font = LblInfo.Font
                 };
                 Controls.Add(LblMeasurePowerWidth);
-
-                LoadSettings();
 
                 Timer.Start();
             }
@@ -109,11 +106,11 @@ namespace HAClimateDeskband
 
                 ControlsHelper.SyncBeginInvoke(this, () =>
                 {
-                    PlotViewTemperature.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId);
-                    LblTemperature.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId);
-                    PictureFire.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId);
-                    PictureOff.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId);
-                    PicturePause.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId);
+                    PlotViewTemperature.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId) && settingsOK;
+                    LblTemperature.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId) && settingsOK;
+                    PictureFire.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId) && settingsOK;
+                    PictureOff.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId) && settingsOK;
+                    PicturePause.Visible = !string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId) && settingsOK;
                     PictureHA.Visible = !settingsOK;
                 });
 
@@ -226,7 +223,7 @@ namespace HAClimateDeskband
 
         private void UpdateValues()
         {
-            if (!SettingsOK())
+            if (!SettingsOK() || HttpClient == null)
             {
                 return;
             }
@@ -476,6 +473,7 @@ namespace HAClimateDeskband
         {
             Task task = Task.Run(() =>
             {
+                LoadSettings();
                 ResizeControls();
                 UpdateValues();
             });
