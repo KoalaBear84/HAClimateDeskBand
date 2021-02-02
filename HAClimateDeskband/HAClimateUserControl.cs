@@ -385,41 +385,41 @@ namespace HAClimateDeskband
             try
             {
                 ControlsHelper.SyncBeginInvoke(this, () =>
-            {
-                // It's a mess, because of fonts and positions when the contents of the LblInfo changes..
-                if (ClientSize.Height <= WindowsTaskbarSmallIconsSingleRow)
                 {
-                    LblInfo.Top = HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? 0 : -2;
+                    // It's a mess, because of fonts and positions when the contents of the LblInfo changes..
+                    if (ClientSize.Height <= WindowsTaskbarSmallIconsSingleRow)
+                    {
+                        LblInfo.Top = HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? 0 : -2;
 
-                    PictureFire.Top = LblInfo.Top - (HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? -2 : -4);
-                    PictureOff.Top = LblInfo.Top - (HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? -2 : -4);
-                    PicturePause.Top = LblInfo.Top - (HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? -2 : -4);
-                    PlotViewTemperature.Visible = !HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage;
-                    PlotViewTemperature.Top = ClientSize.Height - 21;
-                }
-                else if (ClientSize.Height <= WindowsTaskbarBigIconsSingleRow)
-                {
-                    LblInfo.Top = 0;
-                    PictureFire.Top = LblInfo.Top + 2;
-                    PictureOff.Top = LblInfo.Top + 2;
-                    PicturePause.Top = LblInfo.Top + 2;
-                    PlotViewTemperature.Visible = !HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage;
-                    PlotViewTemperature.Top = ClientSize.Height - 21;
-                }
-                else
-                {
-                    LblInfo.Top = 3;
-                    PictureFire.Top = LblInfo.Top;
-                    PictureOff.Top = LblInfo.Top;
-                    PicturePause.Top = LblInfo.Top;
-                    PlotViewTemperature.Top = ClientSize.Height - 23;
-                    PlotViewTemperature.Visible = true;
-                }
+                        PictureFire.Top = LblInfo.Top - (HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? -2 : -4);
+                        PictureOff.Top = LblInfo.Top - (HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? -2 : -4);
+                        PicturePause.Top = LblInfo.Top - (HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? -2 : -4);
+                        PlotViewTemperature.Visible = !HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage;
+                        PlotViewTemperature.Top = ClientSize.Height - 21;
+                    }
+                    else if (ClientSize.Height <= WindowsTaskbarBigIconsSingleRow)
+                    {
+                        LblInfo.Top = 0;
+                        PictureFire.Top = LblInfo.Top + 2;
+                        PictureOff.Top = LblInfo.Top + 2;
+                        PicturePause.Top = LblInfo.Top + 2;
+                        PlotViewTemperature.Visible = !HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage;
+                        PlotViewTemperature.Top = ClientSize.Height - 21;
+                    }
+                    else
+                    {
+                        LblInfo.Top = 3;
+                        PictureFire.Top = LblInfo.Top;
+                        PictureOff.Top = LblInfo.Top;
+                        PicturePause.Top = LblInfo.Top;
+                        PlotViewTemperature.Top = ClientSize.Height - 23;
+                        PlotViewTemperature.Visible = true;
+                    }
 
-                LblTemperature.Top = PlotViewTemperature.Bottom - 10;
-                PictureHA.Left = (ClientSize.Width / 2) - PictureHA.Width / 2;
-                PictureHA.Top = (ClientSize.Height / 2) - PictureHA.Height / 2;
-            });
+                    LblTemperature.Top = PlotViewTemperature.Bottom - 10;
+                    PictureHA.Left = (ClientSize.Width / 2) - PictureHA.Width / 2;
+                    PictureHA.Top = (ClientSize.Height / 2) - PictureHA.Height / 2;
+                });
             }
             catch (Exception ex)
             {
