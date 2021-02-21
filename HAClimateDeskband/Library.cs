@@ -10,18 +10,26 @@ namespace HAClimateDeskband
     {
         const string SettingsFileName = "HAClimateDeskBand.json";
 
+        public static string GetSettingsPath() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HAClimateDeskband");
+        public static string GetSettingsFileName() => Path.Combine(GetSettingsPath(), SettingsFileName);
+
         public static HAClimateDeskBandSettings LoadSettings()
         {
-            if (File.Exists(SettingsFileName))
+            try
             {
-                try
+                if (!Directory.Exists(GetSettingsPath()))
                 {
-                    return JsonConvert.DeserializeObject<HAClimateDeskBandSettings>(File.ReadAllText(SettingsFileName));
+                    Directory.CreateDirectory(GetSettingsPath());
                 }
-                catch (Exception ex)
+
+                if (File.Exists(GetSettingsFileName()))
                 {
-                    MessageBox.Show($"Error loading settings: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return JsonConvert.DeserializeObject<HAClimateDeskBandSettings>(File.ReadAllText(GetSettingsFileName()));
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading settings: {ex.Message}", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return new HAClimateDeskBandSettings();
@@ -31,7 +39,12 @@ namespace HAClimateDeskband
         {
             try
             {
-                File.WriteAllText(SettingsFileName, JsonConvert.SerializeObject(settings));
+                if (!Directory.Exists(GetSettingsPath()))
+                {
+                    Directory.CreateDirectory(GetSettingsPath());
+                }
+
+                File.WriteAllText(GetSettingsFileName(), JsonConvert.SerializeObject(settings));
             }
             catch (Exception ex)
             {
