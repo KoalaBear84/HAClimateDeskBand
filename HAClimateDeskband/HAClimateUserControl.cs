@@ -20,6 +20,8 @@ namespace HAClimateDeskband
 {
     public partial class HAClimateUserControl : UserControl
     {
+        private readonly System.Timers.Timer Timer = new System.Timers.Timer(TimeSpan.FromSeconds(15).TotalMilliseconds);
+
         private readonly PlotModel PlotModelTemperature = new PlotModel();
         private LineSeries LineSeries { get; set; } = new LineSeries();
         private PlotViewTransparent PlotViewTemperature { get; set; }
@@ -86,6 +88,7 @@ namespace HAClimateDeskband
                 };
                 Controls.Add(LblMeasurePowerWidth);
 
+                Timer.Elapsed += Timer_Elapsed;
                 Timer.Start();
             }
             catch (Exception ex)
@@ -94,6 +97,19 @@ namespace HAClimateDeskband
             }
 
             Initialized = true;
+        }
+
+        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                Timer.Stop();
+                UpdateValues();
+            }
+            finally
+            {
+                Timer.Start();
+            }
         }
 
         public void LoadSettings()
@@ -455,11 +471,6 @@ namespace HAClimateDeskband
         {
             ResizeControls();
 
-            UpdateValues();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
             UpdateValues();
         }
 

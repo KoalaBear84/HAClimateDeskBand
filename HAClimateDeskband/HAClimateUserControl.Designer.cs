@@ -31,7 +31,6 @@ namespace HAClimateDeskband
         {
             this.components = new System.ComponentModel.Container();
             this.LblInfo = new System.Windows.Forms.Label();
-            this.Timer = new System.Windows.Forms.Timer(this.components);
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.LblTemperature = new System.Windows.Forms.Label();
             this.PictureHA = new System.Windows.Forms.PictureBox();
@@ -60,11 +59,6 @@ namespace HAClimateDeskband
             this.LblInfo.TabIndex = 4;
             this.LblInfo.Text = "Initializing..";
             this.LblInfo.Click += new System.EventHandler(this.LblInfo_Click);
-            // 
-            // Timer
-            // 
-            this.Timer.Interval = 15000;
-            this.Timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // ToolTip
             // 
@@ -173,7 +167,6 @@ namespace HAClimateDeskband
         #endregion
 
         private System.Windows.Forms.Label LblInfo;
-        private System.Windows.Forms.Timer Timer;
         private System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.PictureBox PictureFire;
         private System.Windows.Forms.PictureBox PicturePause;
