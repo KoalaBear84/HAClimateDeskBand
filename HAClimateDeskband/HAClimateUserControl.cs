@@ -6,6 +6,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -20,7 +22,7 @@ namespace HAClimateDeskband
 {
     public partial class HAClimateUserControl : UserControl
     {
-        private readonly System.Timers.Timer Timer = new System.Timers.Timer(TimeSpan.FromSeconds(15).TotalMilliseconds);
+        private readonly BackgroundWorker BackgroundWorker = new BackgroundWorker();
 
         private readonly PlotModel PlotModelTemperature = new PlotModel();
         private LineSeries LineSeries { get; set; } = new LineSeries();
@@ -88,8 +90,8 @@ namespace HAClimateDeskband
                 };
                 Controls.Add(LblMeasurePowerWidth);
 
-                Timer.Elapsed += Timer_Elapsed;
-                Timer.Start();
+                BackgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
+                BackgroundWorker.RunWorkerAsync();
             }
             catch (Exception ex)
             {
@@ -99,16 +101,12 @@ namespace HAClimateDeskband
             Initialized = true;
         }
 
-        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
+            while (true)
             {
-                Timer.Stop();
                 UpdateValues();
-            }
-            finally
-            {
-                Timer.Start();
+                Thread.Sleep(TimeSpan.FromSeconds(15));
             }
         }
 
@@ -439,7 +437,7 @@ namespace HAClimateDeskband
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in ResizeControls: {ex.Message}");
+                SetErrorState($"Error in ResizeControls: {ex.Message}");
             }
         }
 

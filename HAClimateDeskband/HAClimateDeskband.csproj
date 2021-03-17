@@ -117,8 +117,6 @@
       <Version>3.0.41</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Target Name="ILMerge">
     <!-- the ILMergePath property points to the location of ILMerge.exe console application -->
     <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)HAClimateDeskband-merged.dll $(OutDir)HAClimateDeskband.dll $(OutDir)Newtonsoft.Json.dll $(OutDir)OxyPlot.dll $(OutDir)OxyPlot.WindowsForms.dll" />
