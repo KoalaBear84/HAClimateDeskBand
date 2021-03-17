@@ -27,10 +27,10 @@ jobs:
       run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
       
     - name: Build with msbuild
-      run: MSBuild.exe ./HAClimateDeskband/HAClimateDeskband.csproj -t:restore,build,ILMerge -p:Configuration=Release -p:OutputPath=../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
+      run: MSBuild.exe ./HAClimateDeskband/HAClimateDeskband.csproj -t:restore,build,ILMerge -p:Configuration=Release -p:OutputPath=../../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
 
     - name: Build with msbuild
-      run: MSBuild.exe ./HAClimateDeskbandInstaller/HAClimateDeskbandInstaller.csproj -t:restore,build,ILMerge -p:Configuration=Release -p:OutputPath=../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
+      run: MSBuild.exe ./HAClimateDeskbandInstaller/HAClimateDeskbandInstaller.csproj -t:restore,build,ILMerge -p:Configuration=Release -p:OutputPath=../../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
 
     - name: Zipping
       run: |
