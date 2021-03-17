@@ -40,4 +40,4 @@ jobs:
         prerelease: false
         body: ${{ github.event.head_commit.message }}
         files: |
-          ../HAClimateDeskBand-win-x64/*.*
+          ./HAClimateDeskBand-win-x64/*.*
