@@ -41,6 +41,11 @@
   <Target Name="ILMerge">
     <!-- the ILMergePath property points to the location of ILMerge.exe console application -->
     <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)HAClimateDeskbandInstaller-merged.exe $(OutDir)HAClimateDeskbandInstaller.exe $(OutDir)HAClimateDeskband.dll" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskband.dll&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.pdb&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller-merged.pdb&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe.config&quot;" />
+    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe.config&quot;" />
     <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe&quot;" />
     <Exec Command="ren &quot;$(OutDir)HAClimateDeskbandInstaller-merged.exe&quot; &quot;$(OutDir)HAClimateDeskbandInstaller.exe&quot;" />
   </Target>
