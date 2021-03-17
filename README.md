@@ -105,6 +105,10 @@ When you start it for the first time, it will throw this error.. I don't know wh
 *   Replace Newtonsoft.Json?
 *   Installer?
 
+## Thanks To
+
+@leandrosa81 for letting me know CSDeskBand and for the Installer
+
 ## Support
 
 If you like HAClimateDeskBand, please consider supporting me!
