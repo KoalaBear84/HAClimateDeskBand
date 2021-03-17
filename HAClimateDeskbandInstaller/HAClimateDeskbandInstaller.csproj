@@ -68,5 +68,10 @@
   <ItemGroup>
     <Content Include="Resources\HomeAssistant.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ILMerge">
+      <Version>3.0.41</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
