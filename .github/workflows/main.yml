@@ -40,4 +40,4 @@ jobs:
         prerelease: false
         body: ${{ github.event.head_commit.message }}
         files: |
-          HAClimateDeskBandInstaller.exe
+          *.*
