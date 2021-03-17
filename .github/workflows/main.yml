@@ -29,11 +29,6 @@ jobs:
     - name: Build with msbuild
       run: MSBuild.exe -t:restore,build,ILMerge -p:Configuration=Release -p:OutputPath=../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
 
-    - name: Zipping
-      run: |
-        7z a HAClimateDeskBand-win-x64.zip ./HAClimateDeskBand-win-x64/*
-        # 7z is installed in all environments and supports unix permissions while compressing (but not while decompressing!)
-
     - name: Create release
       uses: softprops/action-gh-release@v1
       env:
@@ -45,4 +40,4 @@ jobs:
         prerelease: false
         body: ${{ github.event.head_commit.message }}
         files: |
-          HAClimateDeskBand-*.zip
+          HAClimateDeskBandInstaller.exe
