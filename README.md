@@ -42,9 +42,8 @@ You need Administrator rights!
 You need a Long Lived Access Token for the [Home Assistant REST API](https://developers.home-assistant.io/docs/api/rest/).
 
 1.  Download the latest release
-2.  Place it on a fixed place, like C:\\Program Files\\HAClimateDeskBand\\
-3.  Right click DeskBand\_Install.bat and choose "Run as Administrator"
-4.  You will get the following screen
+2.  Start HAClimateDeskbandInstaller.exe and install
+3.  You might get the following screen
 
 ![](https://user-images.githubusercontent.com/5886900/103490074-9243d500-4e19-11eb-9523-7ae4cf649721.png)
 
