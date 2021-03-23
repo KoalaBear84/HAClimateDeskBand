@@ -172,6 +172,12 @@ namespace HAClimateDeskband
 
             try
             {
+                if (HAClimateDeskBandSettings == null)
+                {
+                    SetErrorState("Empty settings");
+                    return false;
+                }
+
                 if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
                 {
                     SetErrorState("Error settings: API Base Url is NOT OK.");
