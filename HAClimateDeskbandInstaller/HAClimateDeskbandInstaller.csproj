@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ProgressBar.cs" />
     <Compile Include="Helpers\RestartExplorer.cs" />
     <Compile Include="Helpers\Win32Api.cs" />
     <Compile Include="Program.cs" />
@@ -67,7 +66,9 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\HAClimateDeskband.dll" />
+    <EmbeddedResource Include="..\HAClimateDeskBand-win-x64\HAClimateDeskband.dll">
+      <Link>Resources\HAClimateDeskband.dll</Link>
+    </EmbeddedResource>
     <Content Include="Resources\HomeAssistant.ico" />
   </ItemGroup>
   <ItemGroup>

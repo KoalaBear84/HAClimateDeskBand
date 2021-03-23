@@ -1,4 +1,5 @@
 ﻿using HAClimateDeskbandInstaller.Helpers;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +10,10 @@ namespace HAClimateDeskbandInstaller
 {
     class Program
     {
+        private const string InstallerExecutableName = "HAClimateDeskbandInstaller.exe";
+        private const string DllName = "HAClimateDeskband.dll";
+        static Guid UninstallGuid = new Guid(@"2d0e746f-e2ae-4c2c-9040-5c5a715e7a8a");
+
         class InstallInfo
         {
             public List<string> FilesToCopy { get; set; }
@@ -18,12 +23,12 @@ namespace HAClimateDeskbandInstaller
 
         static void Main(string[] args)
         {
-            Console.Title = "HAClimateDeskband Installer";
+            Console.Title = "HA Climate Deskband Installer";
 
             InstallInfo info = new InstallInfo
             {
-                FilesToCopy = new List<string> { "HAClimateDeskband.dll" },
-                FilesToRegister = new List<string> { "HAClimateDeskband.dll" },
+                FilesToCopy = new List<string> { DllName },
+                FilesToRegister = new List<string> { DllName },
                 TargetPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "HAClimateDeskband")
             };
 
@@ -36,8 +41,7 @@ namespace HAClimateDeskbandInstaller
                 Install(info);
             }
 
-            // pause
-            Console.WriteLine("Press a key to close this window..");
+            Console.WriteLine("Press any key to close this window..");
             Console.ReadKey();
         }
 
@@ -56,22 +60,8 @@ namespace HAClimateDeskbandInstaller
 
         static void Install(InstallInfo info)
         {
-            ProgressBar progressBar = new ProgressBar();
-
+            Console.WriteLine("Installing HA Climate Deskband on your computer, please wait.");
             RestartExplorer restartExplorer = new RestartExplorer();
-            restartExplorer.ReportProgress += Console.WriteLine;
-            restartExplorer.ReportPercentage += (percentage) =>
-            {
-                progressBar.Report(percentage);
-            };
-            //Console.WriteLine($"Percentage: {percentage}");
-
-            string[] manifestResourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-
-            foreach (string manifestResourceName in manifestResourceNames)
-            {
-                Console.WriteLine(manifestResourceName);
-            }
 
             // Create directory
             if (!Directory.Exists(info.TargetPath))
@@ -80,31 +70,45 @@ namespace HAClimateDeskbandInstaller
                 Directory.CreateDirectory(info.TargetPath);
                 Console.WriteLine("OK.");
                 CopyFiles(info);
+
+                // Copy the uninstaller too
+                File.Copy(InstallerExecutableName, Path.Combine(info.TargetPath, InstallerExecutableName));
             }
             else
             {
-                //foreach (var item in info.FilesToRegister)
-                //{
-                //    var targetFilePath = System.IO.Path.Combine(info.TargetPath, item);                    
-                //    RegisterDLL(targetFilePath, false, true);
-                //    RegisterDLL(targetFilePath, true, true);
-                //    Console.WriteLine("OK.");
-
-                //}
-
                 restartExplorer.Execute(() =>
                 {
                     CopyFiles(info);
+
+                    // Copy the uninstaller too
+                    File.Copy(InstallerExecutableName, Path.Combine(info.TargetPath, InstallerExecutableName));
                 });
             }
 
             // Register assemblies
-            foreach (string item in info.FilesToRegister)
+            foreach (string filename in info.FilesToRegister)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, item);
-                Console.Write($"Registering {item}.. ");
+                string targetFilePath = Path.Combine(info.TargetPath, filename);
+                Console.Write($"Registering {filename}.. ");
                 RegisterDLL(targetFilePath, true, false);
                 Console.WriteLine("OK.");
+            }
+
+            Console.Write("Registering uninstaller.. ");
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(info.TargetPath, DllName));
+            CreateUninstaller(Path.Combine(info.TargetPath, InstallerExecutableName), Version.Parse(fileVersionInfo.FileVersion));
+            Console.WriteLine("OK.");
+
+            // Remove pending delete operations
+            Console.Write("Cleaning up previous pending uninstalls.. ");
+
+            if (CleanUpPendingDeleteOperations(info.TargetPath, out string errorMessage))
+            {
+                Console.WriteLine("OK.");
+            }
+            else
+            {
+                Console.WriteLine($"ERROR: {errorMessage}");
             }
         }
 
@@ -146,26 +150,59 @@ namespace HAClimateDeskbandInstaller
             RestartExplorer restartExplorer = new RestartExplorer();
             restartExplorer.Execute(() =>
             {
-                // First copy files to program files folder          
+                // Remove files
                 foreach (string item in info.FilesToCopy)
                 {
                     string targetFilePath = Path.Combine(info.TargetPath, item);
 
                     if (File.Exists(targetFilePath))
                     {
-                        Console.Write($"Deleting {item}... ");
+                        Console.Write($"Deleting {item}.. ");
                         File.Delete(targetFilePath);
                         Console.WriteLine("OK.");
                     }
                 }
             });
 
+            Console.Write($"Deleting {InstallerExecutableName}.. ");
+
+            try
+            {
+                if (Win32Api.DeleteFile(Path.Combine(info.TargetPath, InstallerExecutableName)))
+                {
+                    Console.WriteLine("OK.");
+                }
+                else
+                {
+                    Win32Api.MoveFileEx(Path.Combine(info.TargetPath, InstallerExecutableName), null, MoveFileFlags.MOVEFILE_DELAY_UNTIL_REBOOT);
+                    Console.WriteLine("Scheduled for deletion after next reboot.");
+                }
+            }
+            catch
+            {
+                Win32Api.MoveFileEx(Path.Combine(info.TargetPath, InstallerExecutableName), null, MoveFileFlags.MOVEFILE_DELAY_UNTIL_REBOOT);
+                Console.WriteLine("Scheduled for deletion after next reboot.");
+            }
+
             if (Directory.Exists(info.TargetPath))
             {
-                Console.Write("Deleting target directory... ");
-                Directory.Delete(info.TargetPath);
-                Console.WriteLine("OK.");
+                Console.Write("Deleting target directory.. ");
+
+                try
+                {
+                    Directory.Delete(info.TargetPath);
+                    Console.WriteLine("OK.");
+                }
+                catch
+                {
+                    Win32Api.MoveFileEx(info.TargetPath, null, MoveFileFlags.MOVEFILE_DELAY_UNTIL_REBOOT);
+                    Console.WriteLine("Scheduled for deletion after next reboot.");
+                }
             }
+
+            Console.Write("Removing uninstall info from registry.. ");
+            DeleteUninstaller();
+            Console.WriteLine("OK.");
 
             return true;
         }
@@ -183,10 +220,118 @@ namespace HAClimateDeskbandInstaller
                 process.Start();
 
                 string output = process.StandardOutput.ReadToEnd();
-                
+
                 process.WaitForExit();
-                
+
                 return output;
+            }
+        }
+
+        static private void CreateUninstaller(string pathToUninstaller, Version version)
+        {
+            using (RegistryKey parent = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", true))
+            {
+                if (parent == null)
+                {
+                    throw new Exception("Uninstall registry key not found.");
+                }
+
+                try
+                {
+                    RegistryKey registryKey = null;
+
+                    try
+                    {
+                        string guidText = UninstallGuid.ToString("B");
+                        registryKey = parent.OpenSubKey(guidText, true) ?? parent.CreateSubKey(guidText);
+
+                        if (registryKey == null)
+                        {
+                            throw new Exception($"Unable to create uninstaller '{@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"}\\{guidText}'");
+                        }
+
+                        string exe = pathToUninstaller;
+
+                        registryKey.SetValue("DisplayName", "HA Climate DeskBand");
+                        registryKey.SetValue("ApplicationVersion", version.ToString());
+                        registryKey.SetValue("Publisher", "KoalaBear84");
+                        registryKey.SetValue("DisplayIcon", exe);
+                        registryKey.SetValue("DisplayVersion", version.ToString(3));
+                        registryKey.SetValue("URLInfoAbout", "https://github.com/KoalaBear84/HAClimateDeskband");
+                        registryKey.SetValue("InstallDate", DateTime.Now.ToString("yyyyMMdd"));
+                        registryKey.SetValue("UninstallString", exe + " /uninstall");
+                    }
+                    finally
+                    {
+                        if (registryKey != null)
+                        {
+                            registryKey.Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred writing uninstall information to the registry.  The service is fully installed but can only be uninstalled manually through the command line.", ex);
+                }
+            }
+        }
+
+        static private void DeleteUninstaller()
+        {
+            using (RegistryKey parent = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall", true))
+            {
+                if (parent == null)
+                {
+                    throw new Exception("Uninstall registry key not found.");
+                }
+
+                string guidText = UninstallGuid.ToString("B");
+                parent.DeleteSubKeyTree(guidText, false);
+            }
+        }
+
+        static bool CleanUpPendingDeleteOperations(string basepath, out string errorMessage)
+        {
+            // Check the registry for pending operations on the program files (previous pending uninstall)
+
+            try
+            {
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\", true))
+                {
+                    if (key != null)
+                    {
+                        object o = key.GetValue("PendingFileRenameOperations");
+
+                        if (o != null)
+                        {
+                            string[] values = o as string[];
+                            List<string> dest = new List<string>();
+                            
+                            for (int i = 0; i < values.Length; i += 2)
+                            {
+                                if (!values[i].Contains(basepath))
+                                {
+                                    dest.Add(values[i]);
+                                    dest.Add(values[i + 1]);
+                                }
+                            }
+                            //if (dest.Count > 0)
+                            key.SetValue("PendingFileRenameOperations", dest.ToArray());
+                            //else
+                            //key.DeleteValue("PendingFileRenameOperations");
+                        }
+                    }
+                }
+
+                errorMessage = "";
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                errorMessage = "An error occurred cleaning up previous uninstall information to the registry. The program might be partially uninstalled on the next reboot.";
+                return false;
             }
         }
     }
