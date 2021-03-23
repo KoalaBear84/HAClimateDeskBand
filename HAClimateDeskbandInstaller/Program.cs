@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace HAClimateDeskbandInstaller
 {
@@ -40,6 +41,19 @@ namespace HAClimateDeskbandInstaller
             Console.ReadKey();
         }
 
+        public static void WriteEmbeddedResourceToFile(string resourceName, string fileName)
+        {
+            string fullResourceName = $"{Assembly.GetExecutingAssembly().GetName().Name}.Resources.{resourceName}";
+
+            using (Stream manifestResourceSTream = Assembly.GetExecutingAssembly().GetManifestResourceStream(fullResourceName))
+            {
+                using (FileStream fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    manifestResourceSTream.CopyTo(fileStream);
+                }
+            }
+        }
+
         static void Install(InstallInfo info)
         {
             ProgressBar progressBar = new ProgressBar();
@@ -52,21 +66,20 @@ namespace HAClimateDeskbandInstaller
             };
             //Console.WriteLine($"Percentage: {percentage}");
 
+            string[] manifestResourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+
+            foreach (string manifestResourceName in manifestResourceNames)
+            {
+                Console.WriteLine(manifestResourceName);
+            }
+
             // Create directory
             if (!Directory.Exists(info.TargetPath))
             {
                 Console.Write("Creating target directory.. ");
                 Directory.CreateDirectory(info.TargetPath);
                 Console.WriteLine("OK.");
-
-                // First copy files to program files folder          
-                foreach (string item in info.FilesToCopy)
-                {
-                    string targetFilePath = Path.Combine(info.TargetPath, item);
-                    Console.Write(string.Format("Copying {0}.. ", item));
-                    File.Copy(item, targetFilePath, true);
-                    Console.WriteLine("OK.");
-                }
+                CopyFiles(info);
             }
             else
             {
@@ -81,24 +94,27 @@ namespace HAClimateDeskbandInstaller
 
                 restartExplorer.Execute(() =>
                 {
-                    // First copy files to program files folder          
-                    foreach (string item in info.FilesToCopy)
-                    {
-                        string targetFilePath = Path.Combine(info.TargetPath, item);
-                        Console.Write($"Copying {item}.. ");
-                        File.Copy(item, targetFilePath, true);
-                        Console.WriteLine("OK.");
-                    }
+                    CopyFiles(info);
                 });
             }
 
-            // register assemblies
-            //RegistrationServices regAsm = new RegistrationServices();
+            // Register assemblies
             foreach (string item in info.FilesToRegister)
             {
                 string targetFilePath = Path.Combine(info.TargetPath, item);
                 Console.Write($"Registering {item}.. ");
                 RegisterDLL(targetFilePath, true, false);
+                Console.WriteLine("OK.");
+            }
+        }
+
+        private static void CopyFiles(InstallInfo info)
+        {
+            foreach (string item in info.FilesToCopy)
+            {
+                string targetFilePath = Path.Combine(info.TargetPath, item);
+                Console.Write($"Copying {item}.. ");
+                WriteEmbeddedResourceToFile(item, targetFilePath);
                 Console.WriteLine("OK.");
             }
         }
@@ -118,8 +134,7 @@ namespace HAClimateDeskbandInstaller
 
         static bool RollBack(InstallInfo info)
         {
-            // unregister assembly
-            //RegistrationServices regAsm = new RegistrationServices();
+            // Unregister assembly
             foreach (string item in info.FilesToRegister)
             {
                 string targetFilePath = Path.Combine(info.TargetPath, item);

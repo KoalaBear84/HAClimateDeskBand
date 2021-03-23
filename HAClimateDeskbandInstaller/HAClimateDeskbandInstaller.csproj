@@ -18,10 +18,10 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\HAClimateDeskBand-win-x64\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,14 +40,10 @@
   </PropertyGroup>
   <Target Name="ILMerge">
     <!-- the ILMergePath property points to the location of ILMerge.exe console application -->
-    <Exec Command="$(ILMergeConsolePath) /out:$(OutDir)HAClimateDeskbandInstaller-merged.exe $(OutDir)HAClimateDeskbandInstaller.exe $(OutDir)HAClimateDeskband.dll" />
+    <!-- Replaced with Embedded Resource -->
     <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskband.dll&quot;" />
     <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.pdb&quot;" />
-    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller-merged.pdb&quot;" />
     <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe.config&quot;" />
-    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe.config&quot;" />
-    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe&quot;" />
-    <Exec Command="ren &quot;$(OutDir)HAClimateDeskbandInstaller-merged.exe&quot; &quot;$(OutDir)HAClimateDeskbandInstaller.exe&quot;" />
   </Target>
   <ItemGroup>
     <Reference Include="System" />
@@ -71,6 +67,7 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\HAClimateDeskband.dll" />
     <Content Include="Resources\HomeAssistant.ico" />
   </ItemGroup>
   <ItemGroup>
