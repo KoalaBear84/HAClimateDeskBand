@@ -11,7 +11,7 @@ namespace HAClimateDeskbandInstaller
     class Program
     {
         private const string InstallerExecutableName = "HAClimateDeskbandInstaller.exe";
-        private const string DllName = "HAClimateDeskband-merged.dll";
+        private const string DllName = "HAClimateDeskband.dll";
         static Guid UninstallGuid = new Guid(@"2d0e746f-e2ae-4c2c-9040-5c5a715e7a8a");
 
         class InstallInfo
@@ -88,7 +88,7 @@ namespace HAClimateDeskbandInstaller
             // Register assemblies
             foreach (string filename in info.FilesToRegister)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, filename.Replace("-merged", string.Empty));
+                string targetFilePath = Path.Combine(info.TargetPath, filename);
                 Console.Write($"Registering {filename}.. ");
                 RegisterDLL(targetFilePath, true, false);
                 Console.WriteLine("OK.");
@@ -116,7 +116,7 @@ namespace HAClimateDeskbandInstaller
         {
             foreach (string filename in info.FilesToCopy)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, filename.Replace("-merged", string.Empty));
+                string targetFilePath = Path.Combine(info.TargetPath, filename);
                 Console.Write($"Copying {filename}.. ");
                 WriteEmbeddedResourceToFile(filename, targetFilePath);
                 Console.WriteLine("OK.");
@@ -141,7 +141,7 @@ namespace HAClimateDeskbandInstaller
             // Unregister assembly
             foreach (string item in info.FilesToRegister)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, item.Replace("-merged", string.Empty));
+                string targetFilePath = Path.Combine(info.TargetPath, item);
                 RegisterDLL(targetFilePath, false, true);
                 RegisterDLL(targetFilePath, true, true);
             }
@@ -153,7 +153,7 @@ namespace HAClimateDeskbandInstaller
                 // Remove files
                 foreach (string filename in info.FilesToCopy)
                 {
-                    string targetFilePath = Path.Combine(info.TargetPath, filename.Replace("-merged", string.Empty));
+                    string targetFilePath = Path.Combine(info.TargetPath, filename);
 
                     if (File.Exists(targetFilePath))
                     {

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAClimateDeskband", "HAClimateDeskband\HAClimateDeskband.csproj", "{4EE0B5C1-E49B-4CE8-AD43-75DB00104A00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAClimateDeskbandInstaller", "HAClimateDeskbandInstaller\HAClimateDeskbandInstaller.csproj", "{01653002-E017-4F43-9961-5624D588EBE5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4EE0B5C1-E49B-4CE8-AD43-75DB00104A00} = {4EE0B5C1-E49B-4CE8-AD43-75DB00104A00}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

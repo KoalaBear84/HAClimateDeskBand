@@ -38,13 +38,6 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\HomeAssistant.ico</ApplicationIcon>
   </PropertyGroup>
-  <Target Name="ILMerge">
-    <!-- the ILMergePath property points to the location of ILMerge.exe console application -->
-    <!-- Replaced with Embedded Resource -->
-    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskband.dll&quot;" />
-    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.pdb&quot;" />
-    <Exec Command="del /F /Q &quot;$(OutDir)HAClimateDeskbandInstaller.exe.config&quot;" />
-  </Target>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,9 +59,9 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\HAClimateDeskBand-win-x64\HAClimateDeskband-merged.dll">
-      <Link>Resources\HAClimateDeskband-merged.dll</Link>
-    </Content>
+    <EmbeddedResource Include="..\HAClimateDeskBand-win-x64\HAClimateDeskband.dll">
+      <Link>Resources\HAClimateDeskband.dll</Link>
+    </EmbeddedResource>
     <Content Include="Resources\HomeAssistant.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -76,11 +69,24 @@
       <Version>3.0.41</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HAClimateDeskband\HAClimateDeskband.csproj">
+      <Project>{4ee0b5c1-e49b-4ce8-ad43-75db00104a00}</Project>
+      <Name>HAClimateDeskband</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\BuildCommon.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Release (
+	del /F /Q "$(OutDir)HAClimateDeskband.dll"
+	del /F /Q "$(OutDir)HAClimateDeskband.pdb"
+	del /F /Q "$(OutDir)Newtonsoft.Json.dll"
+	del /F /Q "$(OutDir)OxyPlot.dll"
+	del /F /Q "$(OutDir)OxyPlot.WindowsForms.dll"
+	del /F /Q "$(OutDir)HAClimateDeskbandInstaller.exe.config"
+	del /F /Q "$(OutDir)HAClimateDeskbandInstaller.pdb"
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
