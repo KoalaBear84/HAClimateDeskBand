@@ -11,7 +11,7 @@ namespace HAClimateDeskbandInstaller
     class Program
     {
         private const string InstallerExecutableName = "HAClimateDeskbandInstaller.exe";
-        private const string DllName = "HAClimateDeskband.dll";
+        private const string DllName = "HAClimateDeskband-merged.dll";
         static Guid UninstallGuid = new Guid(@"2d0e746f-e2ae-4c2c-9040-5c5a715e7a8a");
 
         class InstallInfo
@@ -88,7 +88,7 @@ namespace HAClimateDeskbandInstaller
             // Register assemblies
             foreach (string filename in info.FilesToRegister)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, filename);
+                string targetFilePath = Path.Combine(info.TargetPath, filename.Replace("-merged", string.Empty));
                 Console.Write($"Registering {filename}.. ");
                 RegisterDLL(targetFilePath, true, false);
                 Console.WriteLine("OK.");
@@ -114,11 +114,11 @@ namespace HAClimateDeskbandInstaller
 
         private static void CopyFiles(InstallInfo info)
         {
-            foreach (string item in info.FilesToCopy)
+            foreach (string filename in info.FilesToCopy)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, item);
-                Console.Write($"Copying {item}.. ");
-                WriteEmbeddedResourceToFile(item, targetFilePath);
+                string targetFilePath = Path.Combine(info.TargetPath, filename.Replace("-merged", string.Empty));
+                Console.Write($"Copying {filename}.. ");
+                WriteEmbeddedResourceToFile(filename, targetFilePath);
                 Console.WriteLine("OK.");
             }
         }
@@ -141,7 +141,7 @@ namespace HAClimateDeskbandInstaller
             // Unregister assembly
             foreach (string item in info.FilesToRegister)
             {
-                string targetFilePath = Path.Combine(info.TargetPath, item);
+                string targetFilePath = Path.Combine(info.TargetPath, item.Replace("-merged", string.Empty));
                 RegisterDLL(targetFilePath, false, true);
                 RegisterDLL(targetFilePath, true, true);
             }
@@ -151,13 +151,13 @@ namespace HAClimateDeskbandInstaller
             restartExplorer.Execute(() =>
             {
                 // Remove files
-                foreach (string item in info.FilesToCopy)
+                foreach (string filename in info.FilesToCopy)
                 {
-                    string targetFilePath = Path.Combine(info.TargetPath, item);
+                    string targetFilePath = Path.Combine(info.TargetPath, filename.Replace("-merged", string.Empty));
 
                     if (File.Exists(targetFilePath))
                     {
-                        Console.Write($"Deleting {item}.. ");
+                        Console.Write($"Deleting {filename}.. ");
                         File.Delete(targetFilePath);
                         Console.WriteLine("OK.");
                     }
