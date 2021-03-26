@@ -72,7 +72,7 @@ namespace HAClimateDeskbandInstaller
                 CopyFiles(info);
 
                 // Copy the uninstaller too
-                File.Copy(InstallerExecutableName, Path.Combine(info.TargetPath, InstallerExecutableName));
+                File.Copy(Assembly.GetExecutingAssembly().Location, Path.Combine(info.TargetPath, InstallerExecutableName));
             }
             else
             {
@@ -81,7 +81,7 @@ namespace HAClimateDeskbandInstaller
                     CopyFiles(info);
 
                     // Copy the uninstaller too
-                    File.Copy(InstallerExecutableName, Path.Combine(info.TargetPath, InstallerExecutableName));
+                    File.Copy(Assembly.GetExecutingAssembly().Location, Path.Combine(info.TargetPath, InstallerExecutableName));
                 });
             }
 
