@@ -63,52 +63,60 @@ namespace HAClimateDeskbandInstaller
             Console.WriteLine("Installing HA Climate Deskband on your computer, please wait.");
             RestartExplorer restartExplorer = new RestartExplorer();
 
-            // Create directory
-            if (!Directory.Exists(info.TargetPath))
+            try
             {
-                Console.Write("Creating target directory.. ");
-                Directory.CreateDirectory(info.TargetPath);
-                Console.WriteLine("OK.");
-                CopyFiles(info);
-
-                // Copy the uninstaller too
-                File.Copy(Assembly.GetExecutingAssembly().Location, Path.Combine(info.TargetPath, InstallerExecutableName));
-            }
-            else
-            {
-                restartExplorer.Execute(() =>
+                // Create directory
+                if (!Directory.Exists(info.TargetPath))
                 {
+                    Console.Write("Creating target directory.. ");
+                    Directory.CreateDirectory(info.TargetPath);
+                    Console.WriteLine("OK.");
                     CopyFiles(info);
 
                     // Copy the uninstaller too
-                    File.Copy(Assembly.GetExecutingAssembly().Location, Path.Combine(info.TargetPath, InstallerExecutableName));
-                });
-            }
+                    File.Copy(Assembly.GetExecutingAssembly().Location, Path.Combine(info.TargetPath, InstallerExecutableName), true);
+                }
+                else
+                {
+                    restartExplorer.Execute(() =>
+                    {
+                        CopyFiles(info);
 
-            // Register assemblies
-            foreach (string filename in info.FilesToRegister)
-            {
-                string targetFilePath = Path.Combine(info.TargetPath, filename);
-                Console.Write($"Registering {filename}.. ");
-                RegisterDLL(targetFilePath, true, false);
+                        // Copy the uninstaller too
+                        File.Copy(Assembly.GetExecutingAssembly().Location, Path.Combine(info.TargetPath, InstallerExecutableName), true);
+                    });
+                }
+
+                // Register assemblies
+                foreach (string filename in info.FilesToRegister)
+                {
+                    string targetFilePath = Path.Combine(info.TargetPath, filename);
+                    Console.Write($"Registering {filename}.. ");
+                    RegisterDLL(targetFilePath, true, false);
+                    Console.WriteLine("OK.");
+                }
+
+                Console.Write("Registering uninstaller.. ");
+                FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(info.TargetPath, DllName));
+                CreateUninstaller(Path.Combine(info.TargetPath, InstallerExecutableName), Version.Parse(fileVersionInfo.FileVersion));
                 Console.WriteLine("OK.");
+
+                // Remove pending delete operations
+                Console.Write("Cleaning up previous pending uninstalls.. ");
+
+                if (CleanUpPendingDeleteOperations(info.TargetPath, out string errorMessage))
+                {
+                    Console.WriteLine("OK.");
+                }
+                else
+                {
+                    Console.WriteLine($"ERROR: {errorMessage}");
+                }
             }
-
-            Console.Write("Registering uninstaller.. ");
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(info.TargetPath, DllName));
-            CreateUninstaller(Path.Combine(info.TargetPath, InstallerExecutableName), Version.Parse(fileVersionInfo.FileVersion));
-            Console.WriteLine("OK.");
-
-            // Remove pending delete operations
-            Console.Write("Cleaning up previous pending uninstalls.. ");
-
-            if (CleanUpPendingDeleteOperations(info.TargetPath, out string errorMessage))
+            catch (Exception ex)
             {
-                Console.WriteLine("OK.");
-            }
-            else
-            {
-                Console.WriteLine($"ERROR: {errorMessage}");
+                Console.WriteLine("Error while installing..");
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -306,7 +314,7 @@ namespace HAClimateDeskbandInstaller
                         {
                             string[] values = o as string[];
                             List<string> dest = new List<string>();
-                            
+
                             for (int i = 0; i < values.Length; i += 2)
                             {
                                 if (!values[i].Contains(basepath))
@@ -324,7 +332,7 @@ namespace HAClimateDeskbandInstaller
                 }
 
                 errorMessage = "";
-                
+
                 return true;
             }
             catch (Exception ex)
