@@ -1,4 +1,4 @@
-using HAClimateDeskband.Models;
+﻿using HAClimateDeskband.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OxyPlot;
@@ -272,24 +272,42 @@ namespace HAClimateDeskband
                     string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
                     JObject jObject = JObject.Parse(json);
 
-                    string hvacState = jObject.SelectToken(".state").Value<string>();
-                    string hvacAction = jObject.SelectToken(".attributes.hvac_action").Value<string>();
+                    string climateState = jObject.SelectToken(".state")?.Value<string>();
+                    string hvacAction = jObject.SelectToken(".attributes.hvac_action")?.Value<string>();
                     setTemperature = jObject.SelectToken(".attributes.temperature").Value<decimal>();
                     currentTemperature = jObject.SelectToken(".attributes.current_temperature")?.Value<decimal>();
 
                     ControlsHelper.SyncBeginInvoke(this, () =>
                     {
-                        switch (hvacAction)
+                        if (hvacAction != null)
                         {
-                            case "idle":
-                                PicturePause.BringToFront();
-                                break;
-                            case "off":
+                            switch (hvacAction)
+                            {
+                                case "idle":
+                                    PicturePause.BringToFront();
+                                    break;
+                                case "off":
+                                    PictureOff.BringToFront();
+                                    break;
+                                case "heating":
+                                    PictureFire.BringToFront();
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (climateState == "off")
+                            {
                                 PictureOff.BringToFront();
-                                break;
-                            case "heating":
+                            }
+                            else if (currentTemperature < setTemperature)
+                            {
                                 PictureFire.BringToFront();
-                                break;
+                            }
+                            else
+                            {
+                                PicturePause.BringToFront();
+                            }
                         }
                     });
                 }
@@ -344,9 +362,9 @@ namespace HAClimateDeskband
                         }
                     }
                     else if (currentTemperature.HasValue)
-                        {
+                    {
                         lines.Add($"{currentTemperature:G29}{temperatureUOM}");
-                        }
+                    }
 
                     if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
                     {
