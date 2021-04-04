@@ -250,7 +250,7 @@ namespace HAClimateDeskband
 
             try
             {
-                decimal? temperature = null;
+                decimal? currentTemperature = null;
                 string temperatureUOM = string.Empty;
                 decimal setTemperature = 0;
                 DateTime lastChanged = DateTime.Now;
@@ -281,7 +281,7 @@ namespace HAClimateDeskband
 
                     if (jObject.SelectToken(".state").Value<string>() != "unavailable" && jObject.SelectToken(".state").Value<string>() != "unknown")
                     {
-                        temperature = Math.Round(jObject.SelectToken(".state").Value<decimal>(), 1);
+                        currentTemperature = Math.Round(jObject.SelectToken(".state").Value<decimal>(), 1);
                     }
 
                     lastChanged = jObject.SelectToken(".last_changed").Value<DateTime>();
@@ -332,9 +332,9 @@ namespace HAClimateDeskband
 
                     if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId))
                     {
-                        if (temperature.HasValue)
+                        if (currentTemperature.HasValue)
                         {
-                            lines.Add($"{temperature:G29}{temperatureUOM}");
+                            lines.Add($"{currentTemperature:G29}{temperatureUOM}");
                         }
                         else
                         {
@@ -346,9 +346,9 @@ namespace HAClimateDeskband
                             lines.Add($"{lastChanged:HH:mm}");
                         }
                     }
-                    else if (currentTemperature != null)
+                    else if (currentTemperature.HasValue)
                         {
-                            lines.Add($"{temperature:G29}{temperatureUOM}");
+                        lines.Add($"{currentTemperature:G29}{temperatureUOM}");
                         }
 
                     if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
