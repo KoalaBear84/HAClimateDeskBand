@@ -258,6 +258,42 @@ namespace HAClimateDeskband
                 decimal powerUsageToday = 0;
                 string powerUsageUOM = string.Empty;
 
+                if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
+                {
+                    string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.PowerUsageEntityId}").GetAwaiter().GetResult();
+                    JObject jObject = JObject.Parse(json);
+
+                    powerUsageToday = jObject.SelectToken(".state").Value<decimal>();
+                    powerUsageUOM = jObject.SelectToken(".attributes.unit_of_measurement").Value<string>();
+                }
+
+                if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId))
+                {
+                    string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
+                    JObject jObject = JObject.Parse(json);
+
+                    string hvacState = jObject.SelectToken(".state").Value<string>();
+                    string hvacAction = jObject.SelectToken(".attributes.hvac_action").Value<string>();
+                    setTemperature = jObject.SelectToken(".attributes.temperature").Value<decimal>();
+                    currentTemperature = jObject.SelectToken(".attributes.current_temperature")?.Value<decimal>();
+
+                    ControlsHelper.SyncBeginInvoke(this, () =>
+                    {
+                        switch (hvacAction)
+                        {
+                            case "idle":
+                                PicturePause.BringToFront();
+                                break;
+                            case "off":
+                                PictureOff.BringToFront();
+                                break;
+                            case "heating":
+                                PictureFire.BringToFront();
+                                break;
+                        }
+                    });
+                }
+
                 if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.TemperatureEntityId))
                 {
                     string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.TemperatureEntityId}").GetAwaiter().GetResult();
@@ -285,45 +321,6 @@ namespace HAClimateDeskband
                     }
 
                     lastChanged = jObject.SelectToken(".last_changed").Value<DateTime>();
-                }
-
-                if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
-                //if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow && !HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
-                {
-                    string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.PowerUsageEntityId}").GetAwaiter().GetResult();
-                    JObject jObject = JObject.Parse(json);
-
-                    powerUsageToday = jObject.SelectToken(".state").Value<decimal>();
-                    powerUsageUOM = jObject.SelectToken(".attributes.unit_of_measurement").Value<string>();
-                }
-
-                decimal? currentTemperature = null;
-
-                if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId))
-                {
-                    string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
-                    JObject jObject = JObject.Parse(json);
-
-                    string hvacState = jObject.SelectToken(".state").Value<string>();
-                    string hvacAction = jObject.SelectToken(".attributes.hvac_action").Value<string>();
-                    setTemperature = jObject.SelectToken(".attributes.temperature").Value<decimal>();
-                    currentTemperature = jObject.SelectToken(".attributes.current_temperature")?.Value<decimal>();
-
-                    ControlsHelper.SyncBeginInvoke(this, () =>
-                    {
-                        switch (hvacAction)
-                        {
-                            case "idle":
-                                PicturePause.BringToFront();
-                                break;
-                            case "off":
-                                PictureOff.BringToFront();
-                                break;
-                            case "heating":
-                                PictureFire.BringToFront();
-                                break;
-                        }
-                    });
                 }
 
                 ControlsHelper.SyncBeginInvoke(this, () =>
