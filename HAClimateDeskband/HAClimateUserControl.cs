@@ -1,4 +1,4 @@
-﻿using HAClimateDeskband.Models;
+using HAClimateDeskband.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OxyPlot;
@@ -297,6 +297,8 @@ namespace HAClimateDeskband
                     powerUsageUOM = jObject.SelectToken(".attributes.unit_of_measurement").Value<string>();
                 }
 
+                decimal? currentTemperature = null;
+
                 if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.ClimateEntityId))
                 {
                     string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
@@ -305,6 +307,7 @@ namespace HAClimateDeskband
                     string hvacState = jObject.SelectToken(".state").Value<string>();
                     string hvacAction = jObject.SelectToken(".attributes.hvac_action").Value<string>();
                     setTemperature = jObject.SelectToken(".attributes.temperature").Value<decimal>();
+                    currentTemperature = jObject.SelectToken(".attributes.current_temperature")?.Value<decimal>();
 
                     ControlsHelper.SyncBeginInvoke(this, () =>
                     {
@@ -343,6 +346,10 @@ namespace HAClimateDeskband
                             lines.Add($"{lastChanged:HH:mm}");
                         }
                     }
+                    else if (currentTemperature != null)
+                        {
+                            lines.Add($"{temperature:G29}{temperatureUOM}");
+                        }
 
                     if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
                     {
