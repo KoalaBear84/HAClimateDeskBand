@@ -199,7 +199,7 @@ namespace HAClimateDeskband
             }
         }
 
-        private void SetTemperature(double temperatureDelta)
+        private void SetTemperature(bool increase)
         {
             if (!SettingsOK())
             {
@@ -211,9 +211,10 @@ namespace HAClimateDeskband
                 string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.ClimateEntityId}").GetAwaiter().GetResult();
                 JObject climateGarageState = JObject.Parse(json);
 
-                double currentSetTemperature = climateGarageState.SelectToken(".attributes.temperature").Value<double>();
-                double newSetTemperature = currentSetTemperature += temperatureDelta;
+                decimal currentSetTemperature = climateGarageState.SelectToken(".attributes.temperature").Value<decimal>();
+                decimal targetTempStep = climateGarageState.SelectToken(".attributes.target_temp_step")?.Value<decimal>() ?? 0.1m;
 
+                decimal newSetTemperature = currentSetTemperature += increase ? targetTempStep : targetTempStep * -1;
 
                 HttpResponseMessage httpResponseMessage = HttpClient.PostAsync($"services/climate/set_temperature", new StringContent(JsonConvert.SerializeObject(new SetTemperatureModel
                 {
@@ -225,20 +226,13 @@ namespace HAClimateDeskband
             }
             catch (Exception ex)
             {
-                SetErrorState($"Error setting temperature to {temperatureDelta}: {ex.Message}");
+                SetErrorState($"Error setting temperature: {ex.Message}");
             }
         }
 
         private void ChangeTemperature(bool increase)
         {
-            if (increase)
-            {
-                SetTemperature(0.1);
-            }
-            else
-            {
-                SetTemperature(-0.1);
-            }
+            SetTemperature(increase);
         }
 
         private void UpdateValues()
