@@ -19,9 +19,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-
     - name: Setup NuGet.exe
       uses: nuget/setup-nuget@v1
 
@@ -32,8 +29,11 @@ jobs:
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
       
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
     - name: Build with msbuild
-      run: MSBuild.exe -t:restore,build -p:Configuration=Release -p:OutputPath=../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
+      run: src/MSBuild.exe -t:restore,build -p:Configuration=Release -p:OutputPath=../HAClimateDeskBand-win-x64/ -p:VersionAssembly=${{ steps.get_version.outputs.VERSION }}
 
     - name: Create release
       uses: softprops/action-gh-release@v1
