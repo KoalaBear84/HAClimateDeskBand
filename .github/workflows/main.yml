@@ -24,9 +24,9 @@ jobs:
 
     - name: Setup NuGet.exe
       uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: ${{ matrix.nuget }}
-    - run: nuget restore
+
+    - name: Run nuget restore
+      run: nuget restore
 
     - name: Get version info
       id: get_version
