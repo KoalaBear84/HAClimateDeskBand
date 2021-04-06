@@ -23,7 +23,7 @@ jobs:
       uses: nuget/setup-nuget@v1
 
     - name: Run nuget restore
-      run: src/nuget restore
+      run: nuget restore src
 
     - name: Get version info
       id: get_version
