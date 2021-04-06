@@ -10,22 +10,22 @@ Home Assistant is a free and open-source home automation software designed to be
 
 ## Screenshots
 
-![](https://user-images.githubusercontent.com/5886900/103490238-beac2100-4e1a-11eb-8e70-4fa4021974b4.png) Default view, "Small icons" disabled, single row, 40px, heating (3.71 kWh used today)
+![](assets/DefaultView40Px.png) Default view, "Small icons" disabled, single row, 40px, heating (3.71 kWh used today)
 
-![](https://user-images.githubusercontent.com/5886900/103490258-e56a5780-4e1a-11eb-92ba-4f69433d66c1.png) "Small icons" enabled, single row, 30px, heating
+![](assets/SingleRow30PxSmallIconsHeating.png) "Small icons" enabled, single row, 30px, heating
 
-![](https://user-images.githubusercontent.com/5886900/103490277-0f237e80-4e1b-11eb-9537-73338f10af36.png) "Small icons" enabled, double row, 60px, heating (temperature last changed at 23:21)
+![](assets/DoubleRow60PxSmallIconsHeating.png) "Small icons" enabled, double row, 60px, heating (temperature last changed at 23:21)
 
-![](https://user-images.githubusercontent.com/5886900/103490312-5578dd80-4e1b-11eb-857b-927bc6a12c3d.png) "Small icons" enabled, single row, 30px, "Prefer Last Change and Power Usage" on, heating
+![](assets/SingleRow30PxSmallIconsPreferLastChangePowerUsage.png) "Small icons" enabled, single row, 30px, "Prefer Last Change and Power Usage" on, heating
 
-![](https://user-images.githubusercontent.com/5886900/103490358-92dd6b00-4e1b-11eb-8d3a-87478a4613c6.png) "Small icons" disabled, single row, 40px, heating
+![](assets/SingleRow40PxHeating.png) "Small icons" disabled, single row, 40px, heating
 
 
 Off, On (Heating) and Pause (temperature OK) state:
 
-![](https://user-images.githubusercontent.com/5886900/103456043-b35dd600-4cf2-11eb-814c-949253dd4bb3.png)
-![](https://user-images.githubusercontent.com/5886900/103456050-c53f7900-4cf2-11eb-90a5-3d287ee338e4.png)
-![](https://user-images.githubusercontent.com/5886900/103456056-d8524900-4cf2-11eb-9df0-8a4c9cbb8485.png)
+![](assets/ScreenshotOff.png)
+![](assets/ScreenshotHeating.png)
+![](assets/ScreenshotPause.png)
 
 At the bottom left you see the history of the last 3 hours.
 
