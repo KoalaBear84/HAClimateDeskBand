@@ -257,7 +257,10 @@ namespace HAClimateDeskband
                     string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.PowerUsageEntityId}").GetAwaiter().GetResult();
                     JObject jObject = JObject.Parse(json);
 
-                    powerUsageToday = jObject.SelectToken(".state").Value<decimal>();
+                    if (jObject.Value<string>("state") != "unavailable" && jObject.Value<string>("state") != "unknown")
+                    {
+                        powerUsageToday = jObject.Value<decimal>("state");
+                    }
                     powerUsageUOM = jObject.SelectToken(".attributes.unit_of_measurement").Value<string>();
                 }
 
