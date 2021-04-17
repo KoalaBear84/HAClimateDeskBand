@@ -177,6 +177,10 @@ namespace HAClimateDeskband
                     SetErrorState("Empty settings");
                     return false;
                 }
+                else
+                {
+                    SetErrorState(null);
+                }
 
                 if (!Uri.IsWellFormedUriString(HAClimateDeskBandSettings.ApiBaseUrl, UriKind.Absolute))
                 {
@@ -401,11 +405,22 @@ namespace HAClimateDeskband
             {
                 ControlsHelper.SyncBeginInvoke(this, () =>
                 {
-                    LblInfo.ForeColor = Color.Red;
+                    if (!string.IsNullOrWhiteSpace(message))
+                    {
+                        LblInfo.ForeColor = Color.Red;
 
-                    ToolTip.ToolTipIcon = ToolTipIcon.Error;
-                    ToolTip.SetToolTip(LblInfo, message);
-                    ToolTip.ToolTipTitle = "Error";
+                        ToolTip.ToolTipIcon = ToolTipIcon.Error;
+                        ToolTip.SetToolTip(LblInfo, message);
+                        ToolTip.ToolTipTitle = "Error";
+                    }
+                    else
+                    {
+                        LblInfo.ForeColor = Color.White;
+
+                        ToolTip.ToolTipIcon = ToolTipIcon.None;
+                        ToolTip.SetToolTip(LblInfo, message);
+                        ToolTip.ToolTipTitle = string.Empty;
+                    }
                 });
             }
             catch (Exception ex)
