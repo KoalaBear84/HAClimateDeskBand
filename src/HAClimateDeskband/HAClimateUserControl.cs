@@ -1,4 +1,5 @@
-﻿using HAClimateDeskband.Models;
+﻿using CSDeskBand;
+using HAClimateDeskband.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OxyPlot;
@@ -33,10 +34,8 @@ namespace HAClimateDeskband
         private readonly bool Initialized;
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings { Culture = new CultureInfo("en-US") };
 
-        const int WindowsTaskbarSmallIconsSingleRow = 30;
-        const int WindowsTaskbarSmallIconsDoubleRow = WindowsTaskbarSmallIconsSingleRow * 2;
-        const int WindowsTaskbarBigIconsSingleRow = 40;
-        const int WindowsTaskbarBigIconsDoubleRow = WindowsTaskbarBigIconsSingleRow * 2;
+        static readonly int TaskbarHorizontalHeightSmallDoubleRow = CSDeskBandOptions.TaskbarHorizontalHeightSmall * 2;
+        static readonly int TaskbarHorizontalHeightLargeDoubleRow = CSDeskBandOptions.TaskbarHorizontalHeightLarge * 2;
 
         public HAClimateUserControl()
         {
@@ -256,7 +255,7 @@ namespace HAClimateDeskband
                 decimal powerUsageToday = 0;
                 string powerUsageUOM = string.Empty;
 
-                if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
+                if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= CSDeskBandOptions.TaskbarHorizontalHeightLarge || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
                 {
                     string json = HttpClient.GetStringAsync($"states/{HAClimateDeskBandSettings.PowerUsageEntityId}").GetAwaiter().GetResult();
                     JObject jObject = JObject.Parse(json);
@@ -357,7 +356,7 @@ namespace HAClimateDeskband
                             lines.Add($"? {temperatureUOM}");
                         }
 
-                        if (ClientSize.Height > WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
+                        if (ClientSize.Height > CSDeskBandOptions.TaskbarHorizontalHeightLarge || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
                         {
                             lines.Add($"{lastChanged:HH:mm}");
                         }
@@ -367,11 +366,11 @@ namespace HAClimateDeskband
                         lines.Add($"{currentTemperature:G29}{temperatureUOM}");
                     }
 
-                    if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= WindowsTaskbarBigIconsSingleRow || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
+                    if (!string.IsNullOrWhiteSpace(HAClimateDeskBandSettings.PowerUsageEntityId) && ClientSize.Height >= CSDeskBandOptions.TaskbarHorizontalHeightLarge || HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage)
                     {
                         bool showPowerUOM =
-                            ClientSize.Height >= WindowsTaskbarSmallIconsDoubleRow ||
-                            (ClientSize.Height > WindowsTaskbarBigIconsSingleRow && HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage);
+                            ClientSize.Height >= TaskbarHorizontalHeightSmallDoubleRow ||
+                            (ClientSize.Height > CSDeskBandOptions.TaskbarHorizontalHeightLarge && HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage);
 
                         if (!showPowerUOM)
                         {
@@ -441,7 +440,7 @@ namespace HAClimateDeskband
                 ControlsHelper.SyncBeginInvoke(this, () =>
                 {
                     // It's a mess, because of fonts and positions when the contents of the LblInfo changes..
-                    if (ClientSize.Height <= WindowsTaskbarSmallIconsSingleRow)
+                    if (ClientSize.Height <= CSDeskBandOptions.TaskbarHorizontalHeightSmall)
                     {
                         LblInfo.Top = HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage ? 0 : -2;
 
@@ -451,7 +450,7 @@ namespace HAClimateDeskband
                         PlotViewTemperature.Visible = !HAClimateDeskBandSettings.PreferLastChangeAndPowerUsage;
                         PlotViewTemperature.Top = ClientSize.Height - 21;
                     }
-                    else if (ClientSize.Height <= WindowsTaskbarBigIconsSingleRow)
+                    else if (ClientSize.Height <= CSDeskBandOptions.TaskbarHorizontalHeightLarge)
                     {
                         LblInfo.Top = 0;
                         PictureFire.Top = LblInfo.Top + 2;
