@@ -35,7 +35,6 @@ namespace HAClimateDeskband
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings { Culture = new CultureInfo("en-US") };
 
         static readonly int TaskbarHorizontalHeightSmallDoubleRow = CSDeskBandOptions.TaskbarHorizontalHeightSmall * 2;
-        static readonly int TaskbarHorizontalHeightLargeDoubleRow = CSDeskBandOptions.TaskbarHorizontalHeightLarge * 2;
 
         public HAClimateUserControl()
         {
