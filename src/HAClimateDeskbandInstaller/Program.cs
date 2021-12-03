@@ -14,6 +14,8 @@ namespace HAClimateDeskbandInstaller
         private const string DllName = "HAClimateDeskband.dll";
         static Guid UninstallGuid = new Guid(@"2d0e746f-e2ae-4c2c-9040-5c5a715e7a8a");
 
+        public static Version Version { get; private set; }
+
         class InstallInfo
         {
             public List<string> FilesToCopy { get; set; }
@@ -23,7 +25,11 @@ namespace HAClimateDeskbandInstaller
 
         static void Main(string[] args)
         {
-            Console.Title = "HA Climate Deskband Installer";
+            Version = typeof(Program).Assembly.GetName().Version;
+
+            string message = $"HA Climate Deskband {Version} Installer";
+            Console.Title = message;
+            Console.WriteLine(message);
 
             InstallInfo info = new InstallInfo
             {
@@ -60,7 +66,7 @@ namespace HAClimateDeskbandInstaller
 
         static void Install(InstallInfo info)
         {
-            Console.WriteLine("Installing HA Climate Deskband on your computer, please wait.");
+            Console.WriteLine($"Installing HA Climate Deskband {Version} on your computer, please wait.");
             RestartExplorer restartExplorer = new RestartExplorer();
 
             try
