@@ -102,7 +102,6 @@ When you start it for the first time, it will throw this error.. I don't know wh
 *   Restore color after error
 *   Improve efficiency, retrieve history graph since last datetime, and don't retrieve every run
 *   Replace Newtonsoft.Json?
-*   Installer?
 
 ## Thanks To
 
