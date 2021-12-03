@@ -11,6 +11,8 @@ namespace HAClimateDeskband
         public FormSettings()
         {
             InitializeComponent();
+
+            Text += $" {typeof(FormSettings).Assembly.GetName().Version}";
         }
 
         private void FormSettings_Load(object sender, EventArgs e)
@@ -52,6 +54,14 @@ namespace HAClimateDeskband
             Library.SaveSettings(ScreenToSettings());
             HAClimateDeskband.LoadSettings();
             Close();
+        }
+
+        private void FormSettings_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Escape))
+            {
+                Close();
+            }
         }
     }
 }

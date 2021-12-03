@@ -187,12 +187,14 @@ namespace HAClimateDeskband
             this.Controls.Add(this.BtnSave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HA Climate DeskBand";
             this.Load += new System.EventHandler(this.FormSettings_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FormSettings_KeyPress);
             this.ResumeLayout(false);
             this.PerformLayout();
 
