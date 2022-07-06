@@ -1,6 +1,6 @@
 # Home Assistant Climate Deskband
 
-Control a thermostat from you taskbar!
+Control a thermostat from you taskbar! (Only compatible with Windows 10, as Microsoft kills the Deskbands in Windows 11)
 
 I wanted to have a quicker way to control the thermostat than open the webpage or the app, but have it always available at my fingertips.
 
@@ -31,7 +31,7 @@ At the bottom left you see the history of the last 3 hours.
 
 ## My setup
 
-Working from Home since March 2020, and now the winter has arrived, it was getting cold (17°C) in the garage to work all day, sitting still. The wall radiator only provides some warmth when the underfloor heater is asking heat. So I needed some extra heating.
+Working from Home since March 2020, and now the winter has arrived, it was getting cold (sub 17°C) in the garage to work all day, sitting still. The wall radiator only provides some warmth when the underfloor heater is asking heat. So I needed some extra heating.
 
 I have a smart power plug connected to Home Assistant which has a electric heater on it. Besides that I have the [Xiaomi LYWSD03MMC](https://a.aliexpress.com/_BSEyaG) Hygrometer, read through an [ESP32](https://a.aliexpress.com/_B1IE4Y) with an [antenna](https://a.aliexpress.com/_B1fp7a). The Xiaomi LYWSD03MMC is flashed with [custom firmware](https://github.com/atc1441/ATC_MiThermometer) made by ATC1441, thanks @ATC1441! This provides faster/better temperature changes and also shows battery.
 
