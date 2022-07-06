@@ -393,8 +393,22 @@ namespace HAClimateDeskband
             }
             catch (Exception ex)
             {
-                SetErrorState($"Error retrieving/updating values: {ex.Message}");
+                SetErrorState($"Error retrieving/updating values:{Environment.NewLine}{GetExceptionWithInner(ex)}");
             }
+        }
+
+        private static string GetExceptionWithInner(Exception ex)
+        {
+            string errorMessage = ex.Message;
+            Exception exInner = ex;
+
+            while (exInner.InnerException != null)
+            {
+                errorMessage += $"{Environment.NewLine} -> {exInner.InnerException.Message}";
+                exInner = exInner.InnerException;
+            }
+
+            return errorMessage;
         }
 
         private void SetErrorState(string message)
